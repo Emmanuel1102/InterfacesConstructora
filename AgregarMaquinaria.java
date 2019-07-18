@@ -36,14 +36,14 @@ public class AgregarMaquinaria extends JFrame {
 		Imagen.setBackground(Color.black);
 		DatosMaquinaria.add(Imagen);
 
-		JLabel Encabezado = new JLabel("Agregar datos de la maquinarÌa:");
+		JLabel Encabezado = new JLabel("Agregar datos de la maquinar√≠a:");
 		Encabezado.setForeground(Color.white);
 		Font fuente=new Font("Arial", Font.BOLD, 16);
 		Encabezado.setFont(fuente);
 		Encabezado.setBounds(349,0,300,70);
 		DatosMaquinaria.add(Encabezado);
 		
-		JLabel NombreMaquina = new JLabel("Nombre de la m·quina:");
+		JLabel NombreMaquina = new JLabel("Nombre de la m√°quina:");
 		NombreMaquina.setForeground(Color.white);
 		Font fuenteMaquina= new Font("Arial",Font.BOLD,14);
 		NombreMaquina.setFont(fuenteMaquina);
@@ -56,7 +56,7 @@ public class AgregarMaquinaria extends JFrame {
 		NombreMaquinatxt.setBounds(163,92,200,30);
 		DatosMaquinaria.add(NombreMaquinatxt);
 		
-		JLabel Modelo = new JLabel("Modelo de la m·quina:");
+		JLabel Modelo = new JLabel("Modelo de la m√°quina:");
 		Modelo.setForeground(Color.white);
 		Font fuenteModelo= new Font("Arial",Font.BOLD,14);
 		Modelo.setFont(fuenteModelo);
@@ -69,7 +69,7 @@ public class AgregarMaquinaria extends JFrame {
 		Modelotxt.setBounds(164,140,200,30);
 		DatosMaquinaria.add(Modelotxt);
 		
-		JLabel Tipo = new JLabel("Tipo de m·quina:");
+		JLabel Tipo = new JLabel("Tipo de m√°quina:");
 		Tipo.setForeground(Color.white);
 		Font fuenteTipo= new Font("Arial",Font.BOLD,14);
 		Tipo.setFont(fuenteTipo);
@@ -122,11 +122,26 @@ public class AgregarMaquinaria extends JFrame {
 		MarcaTxt.setBounds(161,334,200,30);
 		DatosMaquinaria.add(MarcaTxt);
 		
+		// En esta parte van los estados, los cuales deben ser : Ocupado,desocupado y descompuesto
+		
+		JLabel EstadoMaquinaAgregar= new JLabel("Estado:");
+		EstadoMaquinaAgregar.setForeground(Color.white);
+		Font fuenteMaquinaC= new Font("Arial",Font.BOLD,14);
+		EstadoMaquinaAgregar.setFont(fuenteMaquinaC);
+		EstadoMaquinaAgregar.setBounds(375,30,300,150);
+		DatosMaquinaria.add(EstadoMaquinaAgregar);
+		
+		JComboBox EstadoMaquinatxtAgregar= new JComboBox();
+		EstadoMaquinatxtAgregar.setForeground(Color.black);
+		EstadoMaquinatxtAgregar.setBorder(null);
+		EstadoMaquinatxtAgregar.setBounds(427,92,150,30);
+		DatosMaquinaria.add(EstadoMaquinatxtAgregar);
+		
 		
 		
 		///////Botones
 		
-		JButton AgregarMaquinaria= new JButton("Agregar maquinarÌa");
+		JButton AgregarMaquinaria= new JButton("Agregar maquinar√≠a");
 		AgregarMaquinaria.setBackground(Color.decode("#049cff"));
 		AgregarMaquinaria.setBounds(350,400,210,50);
 		AgregarMaquinaria.setBorder(new ComponenteBotonRedondo(40));
