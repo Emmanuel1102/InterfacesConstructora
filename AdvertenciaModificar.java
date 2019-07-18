@@ -12,7 +12,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 public class AdvertenciaModificar extends JFrame {
-
+///Hola/////
 	AdvertenciaModificar(){
 		
 		setSize(470,200);
@@ -32,7 +32,7 @@ public class AdvertenciaModificar extends JFrame {
 		
 		
 		JLabel etiquetaAviso;
-		etiquetaAviso=new JLabel("¿Estas seguro de modificar los datos?");
+		etiquetaAviso=new JLabel("Â¿Estas seguro de modificar los datos?");
 		etiquetaAviso.setForeground(Color.white);
 		etiquetaAviso.setBounds(120,20,400,50);
 		ModifAdv.add(etiquetaAviso);
