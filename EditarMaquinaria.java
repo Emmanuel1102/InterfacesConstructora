@@ -20,7 +20,7 @@ public class EditarMaquinaria extends JFrame {
 
     public boolean confirmar;
 
-    EditarMaquinaria(String nombre, String tipo, int modelo, String estado, float precioRenta) {
+    EditarMaquinaria(String nombre, String tipo, int modelo, String estado, double precioRenta) {
 
         setSize(860, 500);
         setTitle("Editar maquinarias");
@@ -157,12 +157,14 @@ public class EditarMaquinaria extends JFrame {
         AgregarMaquinaria.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                JFrame auxiliar = new AdvertenciaModificar(copy);
+                new OpcionesEditar();
+                /*JFrame auxiliar = new AdvertenciaModificar(copy);
                 if (confirmar == true) {
 
                 } else {
 
-                }
+                }*/
+                
             }
         });
 

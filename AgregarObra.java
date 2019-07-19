@@ -14,6 +14,10 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import com.toedter.calendar.JCalendar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AgregarObra extends JFrame {
 
@@ -314,6 +318,33 @@ public class AgregarObra extends JFrame {
         AgregarInformación.setBorder(new ComponenteBotonRedondo(40));
         AgregarInformación.setForeground(Color.decode("#049cff"));
         DatosMaquinaria.add(AgregarInformación);
+        AgregarInformación.addActionListener(new ActionListener() {
+                SimpleDateFormat ff = new SimpleDateFormat("YYYY/MM/dd");
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String empresa=empresatxt.getText();
+                String nombreCli=NombreResponsabletxt.getText();
+                String apellidoP=ApellidoResponsablePaternotxt.getText();
+                String apellidoM=ApellidoResponsableMaternotxt.getText();
+                int telefono=AgregarObra.esNum(Telefonotxt.getText());
+                String correo=Correotxt.getText();
+                double monto=AgregarObra.esDouble(Montotxt.getText());
+                String dateIni=ff.format(FechaI.getDate());
+                String dateFin=ff.format(FechaF.getDate());
+                System.out.println(dateIni);
+                System.out.println(dateFin);
+                String calle=Calletxt.getText();
+                int numero=AgregarObra.esNum(Numtxt.getText());
+                String colonia=Coltxt.getText();
+                String municipio=Municipiotxt.getText();
+                String estado=Estadotxt.getText();
+                String nombreObra=NombreObrartxt.getText();
+                String tipo=(String)TipoMC.getSelectedItem();
+                String modelo=(String) MaquinariaC.getSelectedItem();
+                int cantidad=(int)CantidadSpiner.getValue();
+                
+            }
+        });
 
         ImageIcon background_image = new ImageIcon("C:\\Users\\Adan Sanchez\\Documents\\NetBeansProjects\\Fun_Ing_Soft\\src\\neo4.jpg");
         Image img = background_image.getImage();
@@ -329,6 +360,24 @@ public class AgregarObra extends JFrame {
 
         setVisible(true);
 
+    }
+    
+    private static int esNum(String cadena) {
+        try {
+            int a = Integer.parseInt(cadena);
+            return a;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+    
+    private static double esDouble(String cadena) {
+        try {
+            double a=Double.parseDouble(cadena);
+            return a;
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public static void main(String[] args) {

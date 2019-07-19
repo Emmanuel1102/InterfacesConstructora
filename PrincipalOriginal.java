@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -154,7 +157,7 @@ public class PrincipalOriginal extends JFrame implements ActionListener {
                     String tipo = (String) MaquinasT.getValueAt(fila, 1);
                     int modelo = PrincipalOriginal.esNum((String) MaquinasT.getValueAt(fila, 2));
                     String estado = (String) MaquinasT.getValueAt(fila, 4);
-                    float precioRenta = PrincipalOriginal.esFlo((String) MaquinasT.getValueAt(fila, 5));
+                    double precioRenta = PrincipalOriginal.esDouble((String) MaquinasT.getValueAt(fila, 5));
                     new EditarMaquinaria(nombre, tipo, modelo, estado, precioRenta);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "Seleccione una maquina");
@@ -257,7 +260,20 @@ public class PrincipalOriginal extends JFrame implements ActionListener {
         Editar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                new EditarObra();
+                try {
+                    int fila = OrasT.getSelectedRow();
+                    String obra = (String) OrasT.getValueAt(fila, 0);
+                    String responsable = (String) OrasT.getValueAt(fila, 1);
+                    Date fechaIni = new Date((String) OrasT.getValueAt(fila, 2));
+                    Date fechaFin = new Date((String) OrasT.getValueAt(fila, 3));
+                    int numero = PrincipalOriginal.esNum((String) OrasT.getValueAt(fila, 4));
+                    double inversion = esDouble((String) OrasT.getValueAt(fila, 5));
+                    String empresa = (String) OrasT.getValueAt(fila, 6);
+                    int numMaqui = esNum((String) OrasT.getValueAt(fila, 7));
+                    new EditarObra(obra, responsable, fechaIni, fechaFin, numero, inversion, empresa, numMaqui);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Seleccione una Obra");
+                }
             }
         });
 
@@ -371,9 +387,15 @@ public class PrincipalOriginal extends JFrame implements ActionListener {
         }
     }
 
-    private static float esFlo(String cadena) {
+    private static double esDouble(String cadena) {
         try {
-            float a = Float.parseFloat(cadena.replace("$", ""));
+            Pattern p = Pattern.compile("[$',']");
+            Matcher m = p.matcher(cadena);
+            String remplazado="";
+            if (m.find()) {
+                remplazado = m.replaceAll("");                
+            }
+            double a = Double.parseDouble(remplazado);
             return a;
         } catch (Exception e) {
             return 0;

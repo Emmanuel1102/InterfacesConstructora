@@ -17,10 +17,11 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import com.toedter.calendar.JCalendar;
+import java.util.Date;
 
 public class EditarObra extends JFrame {
 
-    EditarObra() {
+    EditarObra(String obra,String responsable,Date fechaIni,Date fechaFin,int numero,double inversion,String empresa,int numMaqui) {
 
         setSize(1366, 768);
         setTitle("Editar obras");
@@ -46,7 +47,7 @@ public class EditarObra extends JFrame {
         empresaEditar.setBounds(0, 0, 300, 150);
         DatosObras.add(empresaEditar);
 
-        JTextField empresatxtEditar = new JTextField("");
+        JTextField empresatxtEditar = new JTextField(empresa);
         empresatxtEditar.setForeground(Color.black);
         empresatxtEditar.setBorder(null);
         empresatxtEditar.setBounds(170, 63, 200, 30);
@@ -105,7 +106,7 @@ public class EditarObra extends JFrame {
         TelefonoEditar.setBounds(510, 0, 300, 150);
         DatosObras.add(TelefonoEditar);
 
-        JTextField TelefonotxtEditar = new JTextField("");
+        JTextField TelefonotxtEditar = new JTextField(String.valueOf(numero));
         TelefonotxtEditar.setForeground(Color.black);
         TelefonotxtEditar.setBounds(700, 62, 110, 30);
         TelefonotxtEditar.setBorder(null);
@@ -131,7 +132,7 @@ public class EditarObra extends JFrame {
         MontoEditar.setBounds(512, 40, 300, 150);
         DatosObras.add(MontoEditar);
 
-        JTextField MontotxtEditar = new JTextField("");
+        JTextField MontotxtEditar = new JTextField(String.valueOf(inversion));
         MontotxtEditar.setForeground(Color.black);
         MontotxtEditar.setBounds(650, 100, 70, 30);
         MontotxtEditar.setBorder(null);
@@ -144,7 +145,7 @@ public class EditarObra extends JFrame {
         FechaInicioEditar.setBounds(0, 70, 300, 300);
         DatosObras.add(FechaInicioEditar);
 
-        JCalendar FechaIEditar = new JCalendar();
+        JCalendar FechaIEditar = new JCalendar(fechaIni);
         FechaIEditar.setForeground(Color.black);
         FechaIEditar.setBorder(null);
         FechaIEditar.setBounds(0, 230, 200, 170);
@@ -157,7 +158,7 @@ public class EditarObra extends JFrame {
         FechaFinalEditar.setBounds(250, 70, 300, 300);
         DatosObras.add(FechaFinalEditar);
 
-        JCalendar FechaFEditar = new JCalendar();
+        JCalendar FechaFEditar = new JCalendar(fechaFin);
         FechaFEditar.setForeground(Color.black);
         FechaFEditar.setBorder(null);
         FechaFEditar.setBounds(250, 230, 200, 170);
@@ -244,7 +245,7 @@ public class EditarObra extends JFrame {
         NombreObraEditar.setBounds(1030, 150, 300, 300);
         DatosObras.add(NombreObraEditar);
 
-        JTextField NombreObraEditartxt = new JTextField();
+        JTextField NombreObraEditartxt = new JTextField(obra);
         NombreObraEditartxt.setForeground(Color.black);
         NombreObraEditartxt.setBounds(1170, 288, 150, 30);
         NombreObraEditartxt.setBorder(null);
@@ -333,9 +334,9 @@ public class EditarObra extends JFrame {
 
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         new EditarObra();
-    }
+    }*/
 
 }

@@ -2,28 +2,17 @@
 
 import javax.swing.JOptionPane;
 
-public class OpcionesEditar{
-    public static void main(String[] args){
+public class OpcionesEditar {
 
+    public static void main(String[] args) {
+        int Aviso = JOptionPane.showConfirmDialog(null,"Â¿ESTAS SEGURO GUARDAR LOS DATOS EDITADOS!?","",
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (Aviso == JOptionPane.YES_OPTION) {
+            JOptionPane.showMessageDialog(null, "Â¿SE HAN EDITADO LOS DATOS SATISFACTORIAMENTE!");
+        } else {
 
-        int Aviso = JOptionPane.showConfirmDialog(
-            null,
-            "¿ESTAS SEGURO GUARDAR LOS DATOS EDITADOS!?",
-            "",
-            JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE );
-        
+            /////Aqui deberian ir todas las ventanas de editar
 
-        if(Aviso == JOptionPane.YES_OPTION)
-        {
-        	   JOptionPane.showMessageDialog(null, "¡SE HAN EDITADO LOS DATOS SATISFACTORIAMENTE!");
-        	   new PrincipalOriginal();
         }
-        else
-        {
-        	
-        	/////Aqui deberian ir todas las ventanas de editar
-        new EditarMaquinaria();
-   
-        }
-}
+    }
 }
