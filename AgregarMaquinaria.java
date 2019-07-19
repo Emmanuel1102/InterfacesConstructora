@@ -121,7 +121,28 @@ public class AgregarMaquinaria extends JFrame {
         MarcaTxt.setBounds(161, 334, 200, 30);
         DatosMaquinaria.add(MarcaTxt);
 
-        ///////Botones
+        ///////        // En esta parte van los estados, los que deben ser: EN USO, DISPONIBLE y MANTENIMIENTO
+        JLabel  EstadoMaquinaAgregar  =  nuevo  JLabel ( " Estado: " );
+        EstadoMaquinaAgregar . setForeground ( color . blanco);
+        Fuente fuenteMaquinaC =  fuente nueva  ( " Arial " , fuente . BOLD , 14 );
+        EstadoMaquinaAgregar . setFont (fuenteMaquinaC);
+        EstadoMaquinaAgregar . setBounds ( 375 , 30 , 300 , 150 );
+        Datos de maquinaria . añadir ( EstadoMaquinaAgregar );
+
+        String tiposEstados [] = { " EN USO " , " DISPONIBLE " , " MANTENIMIENTO " };
+        JComboBox  EstadoMaquinatxtAgregar  =  new  JComboBox (tiposEstados);
+        EstadoMaquinatxtAgregar . setForeground ( Color . negro);
+        EstadoMaquinatxtAgregar . setBorder ( nulo );
+        EstadoMaquinatxtAgregar . setBounds ( 427 , 92 , 150 , 30 );
+        Datos de maquinaria . add ( EstadoMaquinatxtAgregar );
+        para ( int i =  0 ; i < tiposEstados . length; i ++ ) {
+            if (tiposEstados [i] . es igual a (estado)) {
+                EstadoMaquinatxtAgregar . setSelectedIndex (i);
+            }
+        }
+
+        
+        
         JButton AgregarMaquinaria = new JButton("Agregar maquinaría");
         AgregarMaquinaria.setBackground(Color.decode("#049cff"));
         AgregarMaquinaria.setBounds(350, 400, 210, 50);
