@@ -4,6 +4,10 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -63,10 +67,12 @@ public class AgregarMaquinaria extends JFrame {
         Modelo.setBounds(0, 75, 300, 150);
         DatosMaquinaria.add(Modelo);
 
-        JTextField Modelotxt = new JTextField("");
+        CampoDato Modelotxt = new CampoDato();
         Modelotxt.setForeground(Color.black);
         Modelotxt.setBorder(null);
         Modelotxt.setBounds(164, 140, 200, 30);
+        Modelotxt.setTipo('E');
+        Modelotxt.setLongitud(15);
         DatosMaquinaria.add(Modelotxt);
 
         JLabel Tipo = new JLabel("Tipo de máquina:");
@@ -89,10 +95,12 @@ public class AgregarMaquinaria extends JFrame {
         Costo.setBounds(0, 170, 300, 150);
         DatosMaquinaria.add(Costo);
 
-        JTextField CostoTxt = new JTextField();
+        CampoDato CostoTxt = new CampoDato();
         CostoTxt.setForeground(Color.black);
         CostoTxt.setBorder(null);
-        CostoTxt.setBounds(161, 238, 200, 30);
+        CostoTxt.setBounds(161, 238, 200, 30);        
+        CostoTxt.setTipo('D');
+        CostoTxt.setLongitud(15);
         DatosMaquinaria.add(CostoTxt);
 
         JLabel Matricula = new JLabel("Matricula:");
@@ -120,29 +128,41 @@ public class AgregarMaquinaria extends JFrame {
         MarcaTxt.setBorder(null);
         MarcaTxt.setBounds(161, 334, 200, 30);
         DatosMaquinaria.add(MarcaTxt);
-        
-                ///////        // En esta parte van los estados, los que deben ser: EN USO, DISPONIBLE y MANTENIMIENTO
-        JLabel  EstadoMaquinaAgregar  =  new  JLabel ( " Estado: " );
-        EstadoMaquinaAgregar . setForeground ( Color.WHITE);
-        Font fuenteMaquinaC =  new Font( " Arial " , Font.BOLD , 14 );
-        EstadoMaquinaAgregar . setFont(fuenteMaquinaC);
-        EstadoMaquinaAgregar . setBounds ( 375 , 30 , 300 , 150 );
-        DatosMaquinaria.add( EstadoMaquinaAgregar );
 
-        String tiposEstados [] = { " EN USO " , " DISPONIBLE " , " MANTENIMIENTO " };
-        JComboBox  EstadoMaquinatxtAgregar  =  new  JComboBox (tiposEstados);
-        EstadoMaquinatxtAgregar . setForeground ( Color.BLACK);
-        EstadoMaquinatxtAgregar . setBorder ( null );
-        EstadoMaquinatxtAgregar . setBounds ( 427 , 92 , 150 , 30 );
-        DatosMaquinaria.add ( EstadoMaquinatxtAgregar );
+        ///////        // En esta parte van los estados, los que deben ser: EN USO, DISPONIBLE y MANTENIMIENTO
+        JLabel EstadoMaquinaAgregar = new JLabel(" Estado: ");
+        EstadoMaquinaAgregar.setForeground(Color.WHITE);
+        Font fuenteMaquinaC = new Font(" Arial ", Font.BOLD, 14);
+        EstadoMaquinaAgregar.setFont(fuenteMaquinaC);
+        EstadoMaquinaAgregar.setBounds(375, 30, 300, 150);
+        DatosMaquinaria.add(EstadoMaquinaAgregar);
+
+        String tiposEstados[] = {" EN USO ", " DISPONIBLE ", " MANTENIMIENTO "};
+        JComboBox EstadoMaquinatxtAgregar = new JComboBox(tiposEstados);
+        EstadoMaquinatxtAgregar.setForeground(Color.BLACK);
+        EstadoMaquinatxtAgregar.setBorder(null);
+        EstadoMaquinatxtAgregar.setBounds(427, 92, 150, 30);
+        DatosMaquinaria.add(EstadoMaquinatxtAgregar);
 
         ///////Botones
-        JButton AgregarMaquinaria = new JButton("Agregar maquinaría");
-        AgregarMaquinaria.setBackground(Color.decode("#049cff"));
-        AgregarMaquinaria.setBounds(350, 400, 210, 50);
-        AgregarMaquinaria.setBorder(new ComponenteBotonRedondo(40));
-        AgregarMaquinaria.setForeground(Color.black);
-        DatosMaquinaria.add(AgregarMaquinaria);
+        JButton AgregarMaquina = new JButton("Agregar maquinaría");
+        AgregarMaquina.setBackground(Color.decode("#049cff"));
+        AgregarMaquina.setBounds(350, 400, 210, 50);
+        AgregarMaquina.setBorder(new ComponenteBotonRedondo(40));
+        AgregarMaquina.setForeground(Color.black);
+        DatosMaquinaria.add(AgregarMaquina);
+        AgregarMaquina.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                String nombre = NombreMaquinatxt.getText();
+                int modelo =Integer.parseInt(Modelotxt.getText());
+                String tipo = (String) TipoCombo.getSelectedItem();
+                double costo = Integer.parseInt(CostoTxt.getText());
+                String matricula = MatriculaTxt.getText();
+                String marca = MarcaTxt.getText();
+
+            }
+        });
 
         JButton AgregarFoto = new JButton("Agregar foto");
         AgregarFoto.setBackground(Color.decode("#049cff"));
@@ -161,5 +181,4 @@ public class AgregarMaquinaria extends JFrame {
     public static void main(String[] args) {
         new AgregarMaquinaria();
     }
-
 }

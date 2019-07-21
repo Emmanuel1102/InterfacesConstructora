@@ -246,7 +246,7 @@ public class PrincipalOriginal extends JFrame implements ActionListener {
         Agregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                new AgregarObra();
+                new NuevoAgregarObra();
             }
         });
 
@@ -266,13 +266,13 @@ public class PrincipalOriginal extends JFrame implements ActionListener {
                     String responsable = (String) OrasT.getValueAt(fila, 1);
                     Date fechaIni = new Date((String) OrasT.getValueAt(fila, 2));
                     Date fechaFin = new Date((String) OrasT.getValueAt(fila, 3));
-                    int numero = PrincipalOriginal.esNum((String) OrasT.getValueAt(fila, 4));
+                    String numero = (String) OrasT.getValueAt(fila, 4);
                     double inversion = esDouble((String) OrasT.getValueAt(fila, 5));
                     String empresa = (String) OrasT.getValueAt(fila, 6);
                     int numMaqui = esNum((String) OrasT.getValueAt(fila, 7));
                     new EditarObra(obra, responsable, fechaIni, fechaFin, numero, inversion, empresa, numMaqui);
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "Seleccione una Obra");
+                    JOptionPane.showMessageDialog(null, "Seleccione una Obra\n"+e.toString());
                 }
             }
         });
@@ -391,13 +391,14 @@ public class PrincipalOriginal extends JFrame implements ActionListener {
         try {
             Pattern p = Pattern.compile("[$',']");
             Matcher m = p.matcher(cadena);
-            String remplazado="";
+            String remplazado=cadena;
             if (m.find()) {
                 remplazado = m.replaceAll("");                
             }
             double a = Double.parseDouble(remplazado);
             return a;
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString());
             return 0;
         }
     }

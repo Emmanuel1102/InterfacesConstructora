@@ -67,10 +67,12 @@ public class AgregarObra extends JFrame {
         nombresResponsable.setBounds(0, 30, 280, 230);
         DatosObras.add(nombresResponsable);
 
-        JTextField NombreResponsabletxt = new JTextField("");
+        CampoDato NombreResponsabletxt = new CampoDato();
         NombreResponsabletxt.setForeground(Color.black);
         NombreResponsabletxt.setBounds(69, 135, 120, 30);
         NombreResponsabletxt.setBorder(null);
+        NombreResponsabletxt.setTipo('T');
+        NombreResponsabletxt.setLongitud(20);
         DatosObras.add(NombreResponsabletxt);
 
         JLabel ApellidoResponsablePaterno = new JLabel("Apellido paterno:");
@@ -80,10 +82,12 @@ public class AgregarObra extends JFrame {
         ApellidoResponsablePaterno.setBounds(200, 30, 350, 230);
         DatosObras.add(ApellidoResponsablePaterno);
 
-        JTextField ApellidoResponsablePaternotxt = new JTextField("");
+        CampoDato ApellidoResponsablePaternotxt = new CampoDato();
         ApellidoResponsablePaternotxt.setForeground(Color.black);
         ApellidoResponsablePaternotxt.setBounds(322, 135, 120, 30);
         ApellidoResponsablePaternotxt.setBorder(null);
+        ApellidoResponsablePaternotxt.setTipo('T');
+        ApellidoResponsablePaternotxt.setLongitud(20);
         DatosObras.add(ApellidoResponsablePaternotxt);
 
         JLabel ApellidoResponsableMaterno = new JLabel("Apellido materno:");
@@ -93,10 +97,12 @@ public class AgregarObra extends JFrame {
         ApellidoResponsableMaterno.setBounds(0, 70, 280, 230);
         DatosObras.add(ApellidoResponsableMaterno);
 
-        JTextField ApellidoResponsableMaternotxt = new JTextField("");
+        CampoDato ApellidoResponsableMaternotxt = new CampoDato();
         ApellidoResponsableMaternotxt.setForeground(Color.black);
         ApellidoResponsableMaternotxt.setBounds(128, 175, 120, 30);
         ApellidoResponsableMaternotxt.setBorder(null);
+        ApellidoResponsableMaternotxt.setTipo('T');
+        ApellidoResponsableMaternotxt.setLongitud(20);
         DatosObras.add(ApellidoResponsableMaternotxt);
 
         //////////////////////////
@@ -107,10 +113,12 @@ public class AgregarObra extends JFrame {
         Telefono.setBounds(510, 0, 300, 150);
         DatosObras.add(Telefono);
 
-        JTextField Telefonotxt = new JTextField("");
+        CampoDato Telefonotxt = new CampoDato();
         Telefonotxt.setForeground(Color.black);
         Telefonotxt.setBounds(700, 62, 110, 30);
         Telefonotxt.setBorder(null);
+        Telefonotxt.setTipo('E');
+        Telefonotxt.setLongitud(15);
         DatosObras.add(Telefonotxt);
 
         JLabel Correo = new JLabel("Correo electrónico del responsable:");
@@ -120,7 +128,7 @@ public class AgregarObra extends JFrame {
         Correo.setBounds(840, 0, 300, 150);
         DatosObras.add(Correo);
 
-        JTextField Correotxt = new JTextField("");
+        JTextField Correotxt = new JTextField();
         Correotxt.setForeground(Color.black);
         Correotxt.setBounds(1100, 62, 210, 30);
         Correotxt.setBorder(null);
@@ -133,10 +141,12 @@ public class AgregarObra extends JFrame {
         Monto.setBounds(512, 40, 300, 150);
         DatosObras.add(Monto);
 
-        JTextField Montotxt = new JTextField("");
+        CampoDato Montotxt = new CampoDato();
         Montotxt.setForeground(Color.black);
         Montotxt.setBounds(650, 100, 70, 30);
         Montotxt.setBorder(null);
+        Montotxt.setTipo('D');
+        Montotxt.setLongitud(20);
         DatosObras.add(Montotxt);
 
         JLabel FechaInicio = new JLabel("Fecha de inicio de la obra:");
@@ -179,10 +189,12 @@ public class AgregarObra extends JFrame {
         Calle.setBounds(514, 65, 300, 300);
         DatosObras.add(Calle);
 
-        JTextField Calletxt = new JTextField("");
+        CampoDato Calletxt = new CampoDato();
         Calletxt.setForeground(Color.black);
         Calletxt.setBounds(560, 200, 170, 30);
         Calletxt.setBorder(null);
+        Calletxt.setTipo('T');
+        Calletxt.setLongitud(100);
         DatosObras.add(Calletxt);
 
         JLabel Numero = new JLabel("Número:");
@@ -192,10 +204,12 @@ public class AgregarObra extends JFrame {
         Numero.setBounds(790, 65, 300, 300);
         DatosObras.add(Numero);
 
-        JTextField Numtxt = new JTextField("");
+        CampoDato Numtxt = new CampoDato();
         Numtxt.setForeground(Color.black);
         Numtxt.setBounds(855, 200, 40, 30);
         Numtxt.setBorder(null);
+        Numtxt.setTipo('E');
+        Numtxt.setLongitud(10);
         DatosObras.add(Numtxt);
 
         JLabel colonia = new JLabel("Colonia:");
@@ -205,10 +219,12 @@ public class AgregarObra extends JFrame {
         colonia.setBounds(980, 65, 300, 300);
         DatosObras.add(colonia);
 
-        JTextField Coltxt = new JTextField();
+        CampoDato Coltxt = new CampoDato();
         Coltxt.setForeground(Color.black);
         Coltxt.setBounds(1040, 200, 200, 30);
         Coltxt.setBorder(null);
+        Coltxt.setTipo('T');
+        Coltxt.setLongitud(30);
         DatosObras.add(Coltxt);
 
         JLabel Municipio = new JLabel("Municipio:");
@@ -219,10 +235,12 @@ public class AgregarObra extends JFrame {
         DatosObras.add(Municipio);
 
         //JComboBox Municipiotxt = new JComboBox();
-        JTextField Municipiotxt = new JTextField();
+        CampoDato Municipiotxt = new CampoDato();
         Municipiotxt.setForeground(Color.black);
         Municipiotxt.setBounds(590, 287, 170, 30);
         Municipiotxt.setBorder(null);
+        Municipiotxt.setTipo('T');
+        Municipiotxt.setLongitud(30);
         DatosObras.add(Municipiotxt);
 
         JLabel Estado = new JLabel("Estado:");
@@ -232,10 +250,12 @@ public class AgregarObra extends JFrame {
         Estado.setBounds(790, 150, 100, 300);
         DatosObras.add(Estado);
 
-        JTextField Estadotxt = new JTextField();
+        CampoDato Estadotxt = new CampoDato();
         Estadotxt.setForeground(Color.black);
         Estadotxt.setBounds(850, 287, 170, 30);
         Estadotxt.setBorder(null);
+        Estadotxt.setTipo('T');
+        Estadotxt.setLongitud(30);
         DatosObras.add(Estadotxt);
 
         ///Agregado
@@ -246,10 +266,12 @@ public class AgregarObra extends JFrame {
         NombreObra.setBounds(1030, 150, 300, 300);
         DatosObras.add(NombreObra);
 
-        JTextField NombreObrartxt = new JTextField();
+        CampoDato NombreObrartxt = new CampoDato();
         NombreObrartxt.setForeground(Color.black);
         NombreObrartxt.setBounds(1170, 288, 150, 30);
         NombreObrartxt.setBorder(null);
+        NombreObrartxt.setTipo('T');
+        NombreObrartxt.setLongitud(50);
         DatosObras.add(NombreObrartxt);
 
         //////////////////////// Termina panel uno empieza panel 2: Datos Maquinaria
@@ -326,15 +348,13 @@ public class AgregarObra extends JFrame {
                 String nombreCli=NombreResponsabletxt.getText();
                 String apellidoP=ApellidoResponsablePaternotxt.getText();
                 String apellidoM=ApellidoResponsableMaternotxt.getText();
-                int telefono=AgregarObra.esNum(Telefonotxt.getText());
+                int telefono=Integer.parseInt(Telefonotxt.getText());
                 String correo=Correotxt.getText();
-                double monto=AgregarObra.esDouble(Montotxt.getText());
+                double monto=Double.parseDouble(Montotxt.getText());
                 String dateIni=ff.format(FechaI.getDate());
                 String dateFin=ff.format(FechaF.getDate());
-                System.out.println(dateIni);
-                System.out.println(dateFin);
                 String calle=Calletxt.getText();
-                int numero=AgregarObra.esNum(Numtxt.getText());
+                int numero=Integer.parseInt(Numtxt.getText());
                 String colonia=Coltxt.getText();
                 String municipio=Municipiotxt.getText();
                 String estado=Estadotxt.getText();
@@ -360,24 +380,6 @@ public class AgregarObra extends JFrame {
 
         setVisible(true);
 
-    }
-    
-    private static int esNum(String cadena) {
-        try {
-            int a = Integer.parseInt(cadena);
-            return a;
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-    
-    private static double esDouble(String cadena) {
-        try {
-            double a=Double.parseDouble(cadena);
-            return a;
-        } catch (Exception e) {
-            return 0;
-        }
     }
 
     public static void main(String[] args) {

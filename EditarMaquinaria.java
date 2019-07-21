@@ -6,7 +6,10 @@ import javax.swing.*;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
+//import componentetextfield.CampoDato;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -68,10 +71,13 @@ public class EditarMaquinaria extends JFrame {
         ModeloEditar.setBounds(0, 75, 300, 150);
         DatosMaquinaria.add(ModeloEditar);
 
-        JTextField ModelotxtEditar = new JTextField(String.valueOf(modelo));
+        //JTextField ModelotxtEditar = new JTextField(String.valueOf(modelo));        
+        CampoDato ModelotxtEditar = new CampoDato(String.valueOf(modelo));
         ModelotxtEditar.setForeground(Color.black);
         ModelotxtEditar.setBorder(null);
         ModelotxtEditar.setBounds(164, 140, 200, 30);
+        ModelotxtEditar.setTipo('E');
+        ModelotxtEditar.setLongitud(15);
         DatosMaquinaria.add(ModelotxtEditar);
 
         JLabel TipoEditar = new JLabel("Tipo de máquina:");
@@ -94,10 +100,12 @@ public class EditarMaquinaria extends JFrame {
         CostoEditar.setBounds(0, 170, 300, 150);
         DatosMaquinaria.add(CostoEditar);
 
-        JTextField CostoTxtEditar = new JTextField(String.valueOf(precioRenta));
+        CampoDato CostoTxtEditar=new CampoDato(String.valueOf(precioRenta));
         CostoTxtEditar.setForeground(Color.black);
         CostoTxtEditar.setBorder(null);
-        CostoTxtEditar.setBounds(161, 238, 200, 30);
+        CostoTxtEditar.setBounds(161, 238, 200, 30);        
+        CostoTxtEditar.setTipo('D');
+        CostoTxtEditar.setLongitud(15);
         DatosMaquinaria.add(CostoTxtEditar);
 
         JLabel MatriculaEditar = new JLabel("Matricula:");
@@ -164,7 +172,7 @@ public class EditarMaquinaria extends JFrame {
                 } else {
 
                 }*/
-                
+
             }
         });
 
