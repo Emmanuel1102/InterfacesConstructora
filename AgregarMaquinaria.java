@@ -8,6 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import static java.awt.image.ImageObserver.PROPERTIES;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,6 +25,11 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 public class AgregarMaquinaria extends JFrame {
+
+    PreparedStatement psd, psd2;
+    ModeloTabla_Maquinaria mt = new ModeloTabla_Maquinaria("Adminn", "admin");
+    private FileInputStream fis; //Aca se almacena el flujo del archivo
+    int longitud_bytes;
 
     AgregarMaquinaria() {
 
@@ -34,9 +46,9 @@ public class AgregarMaquinaria extends JFrame {
         DatosMaquinaria.setBackground(Color.decode("#049cff"));
 
         ///En este panel se deben poner la imagenes
-        JPanel Imagen = new JPanel();
+        JLabel Imagen = new JLabel();
         Imagen.setLayout(null);
-        Imagen.setBounds(590, 93, 250, 230);
+        Imagen.setBounds(590, 93, 200, 200);
         Imagen.setBackground(Color.black);
         DatosMaquinaria.add(Imagen);
 
@@ -82,7 +94,8 @@ public class AgregarMaquinaria extends JFrame {
         Tipo.setBounds(0, 125, 300, 150);
         DatosMaquinaria.add(Tipo);
 
-        JComboBox TipoCombo = new JComboBox();
+        String[] tiposMaquinas = {"Excavadora", "Revolvedora", "Volteo"};
+        JComboBox TipoCombo = new JComboBox(tiposMaquinas);
         TipoCombo.setForeground(Color.black);
         TipoCombo.setBorder(null);
         TipoCombo.setBounds(161, 190, 200, 30);
@@ -98,7 +111,7 @@ public class AgregarMaquinaria extends JFrame {
         CampoDato CostoTxt = new CampoDato();
         CostoTxt.setForeground(Color.black);
         CostoTxt.setBorder(null);
-        CostoTxt.setBounds(161, 238, 200, 30);        
+        CostoTxt.setBounds(161, 238, 200, 30);
         CostoTxt.setTipo('D');
         CostoTxt.setLongitud(15);
         DatosMaquinaria.add(CostoTxt);
@@ -134,7 +147,7 @@ public class AgregarMaquinaria extends JFrame {
         EstadoMaquinaAgregar.setForeground(Color.WHITE);
         Font fuenteMaquinaC = new Font(" Arial ", Font.BOLD, 14);
         EstadoMaquinaAgregar.setFont(fuenteMaquinaC);
-        EstadoMaquinaAgregar.setBounds(375, 30, 300, 150);
+        EstadoMaquinaAgregar.setBounds(375, 30, 300, 30);
         DatosMaquinaria.add(EstadoMaquinaAgregar);
 
         String tiposEstados[] = {" EN USO ", " DISPONIBLE ", " MANTENIMIENTO "};
@@ -144,6 +157,19 @@ public class AgregarMaquinaria extends JFrame {
         EstadoMaquinatxtAgregar.setBounds(427, 92, 150, 30);
         DatosMaquinaria.add(EstadoMaquinatxtAgregar);
 
+        JLabel ePrecioRenta = new JLabel("Precio de Renta");
+        ePrecioRenta.setForeground(Color.WHITE);
+        Font fuenteRenta = new Font(" Arial ", Font.BOLD, 14);
+        EstadoMaquinaAgregar.setFont(fuenteMaquinaC);
+        ePrecioRenta.setBounds(375, 70, 60, 30);
+        DatosMaquinaria.add(ePrecioRenta);
+
+        CampoDato dPrecioRenta = new CampoDato();
+        dPrecioRenta.setTipo('D');
+        dPrecioRenta.setLongitud(15);
+        dPrecioRenta.setBounds(440, 70, 200, 30);
+        DatosMaquinaria.add(dPrecioRenta);
+
         ///////Botones
         JButton AgregarMaquina = new JButton("Agregar maquinaría");
         AgregarMaquina.setBackground(Color.decode("#049cff"));
@@ -152,16 +178,49 @@ public class AgregarMaquinaria extends JFrame {
         AgregarMaquina.setForeground(Color.black);
         DatosMaquinaria.add(AgregarMaquina);
         AgregarMaquina.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent ae) {
+
                 String nombre = NombreMaquinatxt.getText();
-                int modelo =Integer.parseInt(Modelotxt.getText());
+                int modelo = Integer.parseInt(Modelotxt.getText());
                 String tipo = (String) TipoCombo.getSelectedItem();
                 double costo = Integer.parseInt(CostoTxt.getText());
                 String matricula = MatriculaTxt.getText();
                 String marca = MarcaTxt.getText();
+                String estado = EstadoMaquinatxtAgregar.getSelectedItem().toString();
+                double precio_renta = Double.parseDouble(dPrecioRenta.getText());
+               
+                try {
+                    Connection cn;
+                    cn = getConexion();
+                    psd = cn.prepareStatement("INSERT INTO MAQUINARIA (NOMBRE_MAQ,TIPO_MAQ,MODELO_MAQ,COSTO_MAQ,ESTADO_MAQ,PRECIORENTA_MAQ,MATRICULA_MAQ,IMAGEN_MAQ) VALUES(?,?,?,?,?,?,?,?)");
+                    psd.setString(1, nombre);
+                    psd.setString(2, tipo);
+                    psd.setInt(3, modelo);
+                    psd.setDouble(4, costo);
+                    psd.setString(5, estado);
+                    psd.setDouble(6, precio_renta);
+                    psd.setString(7, matricula);
+                    psd.setBlob(8, fis, getLongitud());
+                    int res = psd.executeUpdate();
+                    
+                   if (res < 0) {
+                        JOptionPane.showMessageDialog(null, "No se pudo añadir el registro");
+                    }
+                    JOptionPane.showMessageDialog(null, "Registro Exitoso");
+                    cn.close();
+                    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    mt.actualizaEstatus();
+                } catch (SQLException e) {
+                    System.err.println("Error en: " + e);
+                }
 
+                mt.actualizaEstatus();
+                dispose();
             }
+            
+
         });
 
         JButton AgregarFoto = new JButton("Agregar foto");
@@ -170,6 +229,29 @@ public class AgregarMaquinaria extends JFrame {
         AgregarFoto.setBorder(new ComponenteBotonRedondo(40));
         AgregarFoto.setForeground(Color.black);
         DatosMaquinaria.add(AgregarFoto);
+
+        AgregarFoto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser jfc = new JFileChooser();
+                jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                int estado = jfc.showOpenDialog(null);
+                if (estado == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        fis = new FileInputStream(jfc.getSelectedFile());
+                        longitud_bytes = (int) jfc.getSelectedFile().length();
+
+                        Image icono = ImageIO.read(jfc.getSelectedFile()).getScaledInstance(Imagen.getWidth(), Imagen.getHeight(), Image.SCALE_DEFAULT);
+                        Imagen.setIcon(new ImageIcon(icono));
+                        Imagen.updateUI();
+
+                        setLongitud(longitud_bytes);
+                    } catch (Exception ee) {
+                    }
+                }
+
+            }
+        });
 
         JLabel background = new JLabel();
         background.add(DatosMaquinaria);
@@ -180,5 +262,26 @@ public class AgregarMaquinaria extends JFrame {
 
     public static void main(String[] args) {
         new AgregarMaquinaria();
+    }
+
+    public Connection getConexion() {
+        Connection conexion = null;
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            conexion = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Constructora", "Adminn", "admin");
+            System.out.println("Se concecto Correctamente ");
+
+        } catch (Exception e) {
+            System.err.println("Hubo un error en la instalacion " + e);
+        }
+        return conexion;
+
+    }
+    
+    public void setLongitud(int longi){
+        longitud_bytes=longi;
+    }
+    public int getLongitud(){
+        return longitud_bytes;
     }
 }
