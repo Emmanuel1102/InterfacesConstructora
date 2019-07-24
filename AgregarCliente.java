@@ -1,8 +1,15 @@
-import java.awt.*;
+	import java.awt.*;
 
 import javax.swing.*;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,7 +20,28 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 public class AgregarCliente extends JFrame{
-	
+PreparedStatement psd; // variable para la BDD	
+
+
+//Aqui hacemos la conexión a la BDD
+    
+    public Connection getConexion() {
+        Connection conexion = null;
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            conexion = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Constructoraa", "Adminn", "admin");
+            JOptionPane.showMessageDialog(null,
+                    "¡Registro guardado exitosamente!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,
+                    "Hubo un error en la instalacion" + e);
+            //  System.err.println("Hubo un error en la instalacion " + e);
+        }
+        return conexion;
+
+    }
+
+    //_________________________________________________________________________-
 	
 	AgregarCliente(){
 		
@@ -35,17 +63,19 @@ public class AgregarCliente extends JFrame{
 		anuncio.setBounds(370,0,400,70);
 		Clientes.add(anuncio);
 		
-		JLabel nombresResponsable= new JLabel("Nombre(s):");
+		JLabel nombresResponsable = new JLabel("Nombre(s):");
 		nombresResponsable.setForeground(Color.white);
 		Font fuenteResponsables=new Font("Arial",Font.BOLD,20);
 		nombresResponsable.setFont(fuenteResponsables);
 		nombresResponsable.setBounds(0,30,280,230);
 		Clientes.add(nombresResponsable);
-		
-		JTextField NombreResponsabletxt = new JTextField("");
+		//JTextField Nombre
+		CampoDato NombreResponsabletxt = new CampoDato();
 		NombreResponsabletxt.setForeground(Color.black);
 		NombreResponsabletxt.setBounds(128,135,200,30);
 		NombreResponsabletxt.setBorder(null);
+                 NombreResponsabletxt.setTipo('T');
+                NombreResponsabletxt.setLongitud(20);
 		Clientes.add(NombreResponsabletxt);
 		
 		JLabel ApellidoResponsablePaterno= new JLabel("Apellido paterno:");
@@ -55,13 +85,13 @@ public class AgregarCliente extends JFrame{
 		ApellidoResponsablePaterno.setBounds(340,30,350,230);
 		Clientes.add(ApellidoResponsablePaterno);
 	
-		JTextField ApellidoResponsablePaternotxt = new JTextField("");
+		CampoDato ApellidoResponsablePaternotxt = new CampoDato();
 		ApellidoResponsablePaternotxt.setForeground(Color.black);
 		ApellidoResponsablePaternotxt.setBounds(502,135,200,30);
 		ApellidoResponsablePaternotxt.setBorder(null);
 		Clientes.add(ApellidoResponsablePaternotxt);
 		
-		JLabel ApellidoResponsableMaterno= new JLabel("Apellido materno:");
+		JLabel ApellidoResponsableMaterno = new JLabel("Apellido materno:");
 		ApellidoResponsableMaterno.setForeground(Color.white);
 		Font fuenteResponsablesMaterno=new Font("Arial",Font.BOLD,20);
 		ApellidoResponsableMaterno.setFont(fuenteResponsables);
@@ -69,7 +99,7 @@ public class AgregarCliente extends JFrame{
 		Clientes.add(ApellidoResponsableMaterno);
 		
 		
-		JTextField ApellidoResponsableMaternotxt = new JTextField("");
+		CampoDato ApellidoResponsableMaternotxt = new CampoDato();
 		ApellidoResponsableMaternotxt.setForeground(Color.black);
 		ApellidoResponsableMaternotxt.setBounds(890,135,200,30);
 		ApellidoResponsableMaternotxt.setBorder(null);
@@ -82,10 +112,12 @@ public class AgregarCliente extends JFrame{
 		Telefono.setBounds(0,70,200,230);
 		Clientes.add(Telefono);
 		
-		JTextField Telefonotxt = new JTextField("");
+		CampoDato Telefonotxt = new CampoDato();
 		Telefonotxt.setForeground(Color.black);
 		Telefonotxt.setBounds(128,176,200,30);
 		Telefonotxt.setBorder(null);
+                Telefonotxt.setTipo('E');
+                Telefonotxt.setLongitud(9);
 		Clientes.add(Telefonotxt);
 		
 		
@@ -96,7 +128,7 @@ public class AgregarCliente extends JFrame{
 		Correo.setBounds(435,113,260, 150);
 		Clientes.add(Correo);
 		
-		JTextField Correotxt = new JTextField("");
+		CampoDato Correotxt = new CampoDato();
 		Correotxt.setForeground(Color.black);
 		Correotxt.setBounds(502,178,200,30);
 		Correotxt.setBorder(null);
@@ -109,7 +141,7 @@ public class AgregarCliente extends JFrame{
 		empresa.setBounds(797,112,300,150);
 		Clientes.add(empresa);
 		
-		JTextField empresatxt= new JTextField("");
+		CampoDato empresatxt = new CampoDato();
 		empresatxt.setForeground(Color.black);
 		empresatxt.setBorder(null);
 		empresatxt.setBounds(890,178,200,30);
@@ -131,8 +163,8 @@ public class AgregarCliente extends JFrame{
 		Calle.setFont(fontCalle);
 		Calle.setBounds(0,166,300,300);
 		Clientes.add(Calle);
-		
-		JTextField Calletxt = new JTextField("");
+		// JTextField Calle
+		CampoDato Calletxt = new CampoDato();
 		Calletxt.setForeground(Color.black);
 		Calletxt.setBounds(130,300,200,30);
 		Calletxt.setBorder(null);
@@ -140,15 +172,17 @@ public class AgregarCliente extends JFrame{
 		
 		JLabel Numero= new JLabel("Número:");
 		Numero.setForeground(Color.white);
-		Font fontNumero=new Font("Arial",Font.BOLD,20);
+		Font fontNumero = new Font("Arial",Font.BOLD,20);
 		Numero.setFont(fontNumero);
 		Numero.setBounds(418,166,300,300);
 		Clientes.add(Numero);
 		
-		JTextField Numtxt = new JTextField("");
+		CampoDato Numtxt = new CampoDato();
 		Numtxt.setForeground(Color.black);
 		Numtxt.setBounds(503,300,40,30);
 		Numtxt.setBorder(null);
+                 Numtxt.setTipo('E');
+                Numtxt.setLongitud(2);
 		Clientes.add(Numtxt);
 		
 		JLabel colonia = new JLabel("Colonia:");
@@ -158,7 +192,7 @@ public class AgregarCliente extends JFrame{
 	    colonia.setBounds(805,166,300,300);
 		Clientes.add(colonia);
 		
-		JTextField Coltxt= new JTextField();
+		CampoDato Coltxt = new CampoDato();
 		Coltxt.setForeground(Color.black);
 		Coltxt.setBounds(890,300,200,30);
 		Coltxt.setBorder(null);
@@ -174,7 +208,7 @@ public class AgregarCliente extends JFrame{
 		Clientes.add(Municipio);
 		
 		//JComboBox Municipiotxt = new JComboBox();
-		JTextField Municipiotxt= new JTextField();
+		CampoDato Municipiotxt = new CampoDato();
 		Municipiotxt.setForeground(Color.black);
 		Municipiotxt.setBounds(128,350,200,30);
 		Municipiotxt.setBorder(null);
@@ -187,12 +221,12 @@ public class AgregarCliente extends JFrame{
 		Estado.setBounds(427,210,100,300);
 		Clientes.add(Estado);
 		
-		JTextField Estadotxt= new JTextField();
+		CampoDato Estadotxt = new CampoDato();
 		Estadotxt.setForeground(Color.black);
 		Estadotxt.setBounds(503,350,170,30);
 		Estadotxt.setBorder(null);
 		Clientes.add(Estadotxt);
-
+           // Boton agregar cleinte:::::::::::::::::::::::::::
 	     JButton Agregar = new JButton("Agregar cliente");
 	      Agregar.setBackground(Color.black);
 	  	Font fontBoton= new Font("Arial",Font.BOLD,20);
@@ -202,14 +236,62 @@ public class AgregarCliente extends JFrame{
 	        Agregar.setForeground(Color.decode("#049cff"));
 	        Agregar.setBounds(410, 430, 250, 50);
 	        Clientes.add(Agregar);
+                
+                //Aqui se hacen las consultas:::::::::::::::::::::::::::
+                
+                Agregar.addActionListener(new ActionListener() {
+            @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        Connection cn;
+                        cn = getConexion();
+                   // primer consulta a la tabla Clientes --->
+                        psd = cn.prepareStatement("INSERT INTO CLIENTE (NOMBREC,CALLE,COLONIA,MUNICIPIO,ESTADO,CORREO,TELEFONO) VALUES(?,?,?,?,?,?,?)");
 
+                        psd.setString(1, NombreResponsabletxt.getText());
+                        psd.setString(2, Calletxt.getText());
+                        psd.setString(3, Coltxt.getText());
+                        psd.setString(4, Municipiotxt.getText());
+                        psd.setString(5, Estadotxt.getText());
+                        psd.setString(6, Correotxt.getText());
+                        psd.setString(7, Telefonotxt.getText());
+
+                    //  segunda consulta a la tabla Obras  ---->
+                        psd = cn.prepareStatement("INSERT INTO OBRA (CLAVEOB,NOMBRE, AP_PAT, AP_MAT) VALUES(?,?,?,?)");
+                          psd.setString(1,  Numtxt.getText());
+                        psd.setString(2,empresatxt.getText());
+                        psd.setString(3,ApellidoResponsablePaternotxt.getText());
+                        psd.setString(4,ApellidoResponsableMaterno.getText());
+                      
+                        
+                        
+                        
+                        int res = psd.executeUpdate();
+                        if (res < 0) {
+                            JOptionPane.showMessageDialog(null, "No se pudo añadir el registro");
+                        }
+                        cn.close();
+
+                    } catch (SQLException ex) {
+                        System.err.println("Error en: " + ex);
+                    }
+                    // mt.actualizaEstatus();
+                }
+            });
+       
+                ///------------------------------------
+                
+  
 		JLabel background = new JLabel();
 		background.add(Clientes);
 		add(background );
 		setVisible(true);
 
-	}
-	
+	}// cierra AregarCliente
+       
+        
+        
+        
 	public static void main(String[]args){
 		
 		new AgregarCliente();
