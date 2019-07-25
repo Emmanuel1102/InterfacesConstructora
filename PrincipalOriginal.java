@@ -28,6 +28,12 @@ import javax.swing.table.TableColumnModel;
 public class PrincipalOriginal extends JFrame {
 
     private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
+     private CardLayout Imagenes;
+    private  String nImagenes []={"C:\\Users\\Emmanuel\\Desktop\\manual\\m1.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m2.jpg"};
+    private Icon  icons[]={new ImageIcon(nImagenes[0]),new ImageIcon(nImagenes[1])};
+    private JLabel la[];
+	 private JPanel ap[]; 
+	 int contar=0;
 
     PrincipalOriginal() {
         setSize(1366, 768);
@@ -69,29 +75,107 @@ public class PrincipalOriginal extends JFrame {
     }
 
     public JPanel bienvenido() {
-        bienvenido = new JPanel();
+        
+        //Se agrego en esta parte el algoritmo de la galeria de manual rapido de usuario
+  bienvenido = new JPanel();
         bienvenido.setLayout(null);
         setBounds(0, 0, 1366, 768);
         bienvenido.setBackground(Color.black);
+        
+        JLabel manual = new JLabel("Guía rápida del manual de usuario:");
+        manual.setForeground(Color.decode("#049cff"));
+    	Font fuente=new Font("Arial", Font.BOLD, 16);
+    	manual.setBounds(550,15,400,30);
+    	manual.setFont(fuente);
+        bienvenido.add(manual);
+        
 
-        JLabel MensajeB = new JLabel("Escribe lo que quieras buscar aqui:");
-        MensajeB.setForeground(Color.white);
-        bienvenido.add(MensajeB);
-        MensajeB.setBounds(560, 150, 500, 20);
 
-        JTextField busqueda = new JTextField();
-        busqueda.setForeground(Color.black);
-        busqueda.setBounds(463, 180, 400, 30);
-        bienvenido.add(busqueda);
+		JPanel botonAtras = new JPanel();
+		 botonAtras.setLayout(null);
+		 //botonAtras.setSize(400,350);
+		 botonAtras.setBackground(new Color (0,0,0,100));
+		 botonAtras.setBounds(50,250,51,87);
+			bienvenido.add(botonAtras);
+		
 
-        JButton Buscar = new JButton("BUSCAR");
-        Buscar.setBackground(Color.black);
-        //entrar.setBounds(110, 350, 150, 50);
-        Buscar.setBorder(new ComponenteBotonRedondo(40));
-        Buscar.setForeground(Color.decode("#049cff"));
-        Buscar.setBounds(590, 220, 150, 50);
-        bienvenido.add(Buscar);
+		JPanel botonAdelante = new JPanel();
+		botonAdelante.setLayout(null);
+		//botonAdelante.setSize(400,350);
+		botonAdelante.setBackground(new Color (0,0,0,100));
+		botonAdelante.setBounds(1260,250,51,87);
+		bienvenido.add(botonAdelante);
+		
+		JButton atras= new JButton("<");
+		atras.setBackground(Color.black);
+		Font fuenteA=new Font("Arial", Font.BOLD, 86);
+		atras.setForeground(Color.decode("#049cff"));
+		atras.setFont(fuenteA);
+		//atras.setBackground(Color.decode("#B9090B"));
+		atras.setBounds(1,1,1,1);
+		atras.setSize(51,87);
+		//atras.setIcon(atras1);
+		atras.setBorder(null);
+		 botonAtras.add(atras);
+		
+		JButton adelante= new JButton(">");
+		adelante.setBackground(Color.black);
+		Font fuenteAd=new Font("Arial", Font.BOLD, 86);
+		adelante.setForeground(Color.decode("#049cff"));
+		adelante.setFont(fuenteA);
+		//atras.setBackground(Color.decode("#B9090B"));
+		adelante.setBounds(1,1,1,1);
+		adelante.setSize(51,87);
+	
+		adelante.setBorder(null);
+		botonAdelante.add(adelante);
+		
+		
+		Imagenes=new CardLayout(); 
+		final JPanel ImagenPanel = new JPanel();
+		 ImagenPanel.setLayout(null);
 
+		 ImagenPanel.setBackground(Color.white);
+		 ImagenPanel.setBounds(132,50,1105,500);
+		
+		 la =new JLabel[ nImagenes.length]; 
+		 ap=new JPanel[icons.length];   
+		 ImagenPanel.setLayout(Imagenes);
+		
+		 for(int z=0; z<nImagenes.length;z++){
+			    la[z]=new JLabel(icons[z]); 
+			    ap[z ]=new JPanel(); 
+			    ap[z].add(la[z]);
+			    ap[z].setBackground(Color.BLACK);
+			    ImagenPanel.add(ap[z],String.valueOf(z));
+			}
+		
+		 
+		 adelante.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent arg0) {
+			 if (contar < nImagenes.length) {
+			 contar += 1;
+			 Imagenes.show( ImagenPanel,"" + (contar));
+			 }
+			 }
+			 });
+			
+			 atras.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent arg0) {
+			 if (contar > 0) {
+			 contar -= 1;
+			 Imagenes.show( ImagenPanel, "" + (contar));
+			 }
+			 
+			 
+			 }
+			 });
+		
+		 
+
+		bienvenido.add(ImagenPanel);
+
+        
         return bienvenido;
     }
 
