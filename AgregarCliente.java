@@ -11,10 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
 public class AgregarCliente extends JFrame {
 
-    PreparedStatement psd;	
+    PreparedStatement psd;
 
 // Se realiza la conexión a la BDD 
     public Connection getConexion() {
@@ -27,7 +26,7 @@ public class AgregarCliente extends JFrame {
         } catch (ClassNotFoundException | SQLException | HeadlessException e) {
             JOptionPane.showMessageDialog(null,
                     "Hubo un error en la instalacion" + e);
-            
+
         }
         return conexion;
 
@@ -60,17 +59,14 @@ public class AgregarCliente extends JFrame {
         nombresResponsable.setFont(fuenteResponsables);
         nombresResponsable.setBounds(0, 30, 280, 230);
         Clientes.add(nombresResponsable);
-        //JTextField Nombre
+
         CampoDato NombreResponsabletxt = new CampoDato();
         NombreResponsabletxt.setForeground(Color.black);
-        //NombreResponsabletxt.setBounds(128, 135, 200, 30);
-         NombreResponsabletxt.setBounds(128, 135, 575, 30);
+        NombreResponsabletxt.setBounds(128, 135, 575, 30);
         NombreResponsabletxt.setBorder(null);
         NombreResponsabletxt.setTipo('T');
         NombreResponsabletxt.setLongitud(20);
         Clientes.add(NombreResponsabletxt);
-
-
 
         JLabel Telefono = new JLabel("Télefono:");
         Telefono.setForeground(Color.white);
@@ -97,12 +93,9 @@ public class AgregarCliente extends JFrame {
         JTextField Correotxt = new JTextField("");
         Correotxt.setForeground(Color.black);
         Correotxt.setBounds(502, 178, 200, 30);
-       
+
         Correotxt.setBorder(null);
         Clientes.add(Correotxt);
-
-
-
 
         JLabel Domicilio = new JLabel("Datos domiciliarios:");
         Domicilio.setForeground(Color.white);
@@ -117,7 +110,7 @@ public class AgregarCliente extends JFrame {
         Calle.setFont(fontCalle);
         Calle.setBounds(0, 166, 300, 300);
         Clientes.add(Calle);
-       
+
         JTextField Calletxt = new JTextField("");
         Calletxt.setForeground(Color.black);
         Calletxt.setBounds(130, 300, 200, 30);
@@ -160,7 +153,7 @@ public class AgregarCliente extends JFrame {
         Municipio.setFont(fontMunicipio);
         Municipio.setBounds(0, 210, 300, 300);
         Clientes.add(Municipio);
-        
+
         CampoDato Municipiotxt = new CampoDato();
         Municipiotxt.setForeground(Color.black);
         Municipiotxt.setBounds(128, 350, 200, 30);
@@ -183,8 +176,7 @@ public class AgregarCliente extends JFrame {
         Estadotxt.setTipo('T');
         Estadotxt.setLongitud(30);
         Clientes.add(Estadotxt);
-      
-        
+
         JButton Agregar = new JButton("Agregar cliente");
         Agregar.setBackground(Color.black);
         Font fontBoton = new Font("Arial", Font.BOLD, 20);
@@ -194,7 +186,7 @@ public class AgregarCliente extends JFrame {
         Agregar.setBounds(410, 430, 250, 50);
         Clientes.add(Agregar);
 
-         // Función que se le otorga al boton, siendo guardar los datos
+        // Función que se le otorga al boton, siendo guardar los datos
         // en la BDD 
         Agregar.addActionListener(new ActionListener() {
             @Override
@@ -216,8 +208,6 @@ public class AgregarCliente extends JFrame {
                     psd.setString(7, Correotxt.getText());
                     psd.setString(8, Telefonotxt.getText());
 
-
-                    
                     int res = psd.executeUpdate();
                     if (res < 0) {
                         JOptionPane.showMessageDialog(null, "No se pudo añadir el registro");
@@ -227,11 +217,10 @@ public class AgregarCliente extends JFrame {
                 } catch (SQLException ex) {
                     System.err.println("Error en: " + ex);
                 }
-            
+
             }
         });
 
-              
         JLabel background = new JLabel();
         background.add(Clientes);
         add(background);
