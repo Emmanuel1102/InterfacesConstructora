@@ -1,4 +1,3 @@
-
 import java.awt.*;
 
 import javax.swing.*;
@@ -6,7 +5,10 @@ import javax.swing.*;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,12 +26,40 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
   /**
      * **VARIABLES DEL METODO MAQUINARIA
      */
-    private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
-    ModeloTabla_Maquinaria modelo = new ModeloTabla_Maquinaria("Adminn", "admin");
+//private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
+   
+
+public class PrincipalOriginal extends JFrame {
+    //ModeloTabla_Cliente model= ModeloTabla_Cliente();
+    public Connection getConexion() throws SQLException {
+        Connection conexion = null;
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+            conexion = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Construct", "Adminn", "Admin");
+           // JOptionPane.showMessageDialog(null,
+         //           "¡Registro guardado exitosamente!");
+        } catch (ClassNotFoundException | HeadlessException e) {
+            JOptionPane.showMessageDialog(null,
+                    "Hubo un error en la instalacion" + e);
+
+        }
+        return conexion;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+         ModeloTabla_Maquinaria modelo = new ModeloTabla_Maquinaria("Adminn", "admin");
     TableRowSorter TRSFiltro = new TableRowSorter();
     PreparedStatement psd, psd2;
     JTable MaquinasT = new JTable(modelo);
@@ -40,8 +70,6 @@ import javax.swing.table.TableColumnModel;
     String matricula_maq;
     double Precio_renta_maq;
 
-
-public class PrincipalOriginal extends JFrame {
 
     private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
        private CardLayout Imagenes;
@@ -442,7 +470,7 @@ public class PrincipalOriginal extends JFrame {
         Agregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                new NuevoAgregarObra();
+                new AgregarObra();
             }
         });
 
@@ -521,27 +549,33 @@ public class PrincipalOriginal extends JFrame {
         Agregar.setForeground(Color.decode("#049cff"));
         Agregar.setBounds(400, 498, 150, 50);
         Clientes.add(Agregar);
-        //abre una nueva ventana para agregar a un cliente nuevo
-        Agregar.addActionListener(new ActionListener() {
+      
+         // Funcion para el  boton agregar 
+         Agregar.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                new AgregarCliente();
-            }
-        });
+            public void actionPerformed(ActionEvent e) {
+               AgregarCliente agregarCliente = new AgregarCliente();
+               agregarCliente.setVisible(true); 
+               agregarCliente.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+            }
+         });
         JButton Editar = new JButton("Editar");
         Editar.setBackground(Color.black);
         Editar.setBorder(new ComponenteBotonRedondo(40));
         Editar.setForeground(Color.decode("#049cff"));
         Editar.setBounds(600, 498, 150, 50);
         Clientes.add(Editar);
-        //abre una nueva ventana para agregar un nuevo cliente
-        Editar.addActionListener(new ActionListener() {
+             // función para el boton Editar
+            Editar.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                new EditarCliente();
+            public void actionPerformed(ActionEvent e) {
+               EditarCliente editarCliente = new EditarCliente();
+               editarCliente.setVisible(true);
+               editarCliente.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
             }
-        });
+         });
 
         JButton Eliminar = new JButton("Eliminar");
         Eliminar.setBackground(Color.black);
@@ -553,9 +587,31 @@ public class PrincipalOriginal extends JFrame {
         Eliminar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-
-            }
-        });
+ 
+//        try {
+//            modelo=(ModeloTabla_Maquinaria) MaquinasT.getModel();
+//            modelo.removeRow(MaquinasT.getSelectedRow());
+//            MaquinasT.addRowSelectionInterval(0,0);
+//            modelo=null;
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Seleccione la fila que desea quitar.");
+//        }
+//    int fila = MaquinasT.getSelectedRowCount();
+//                if (fila < 1) {
+//                    JOptionPane.showMessageDialog(null, "Seleccione un registro");
+//                } else {
+//                    if (deleteAct(Integer.parseInt(MaquinasT.getValueAt(MaquinasT.getSelectedRow(), 6).toString())) > 0) {
+//
+//                    }
+//                }
+//                ModeloTabla_Maquinaria.actualizaEstatus();
+//                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//            
+                    
+                
+                
+            
+   }});
 
         return Clientes;
     }
@@ -589,6 +645,46 @@ public class PrincipalOriginal extends JFrame {
         
         return Finanzas;
     }
+    
+    // metdod
+      public int deleteDatos(int id) throws SQLException {
+        Connection cn = getConexion();
+        String sql = "DELETE FROM PERSONA WHERE IDPERSONA =" + id;
+
+        int res = 0;
+        try {
+            psd = cn.prepareStatement(sql);
+            // psd.setInt(1, id);
+            res = psd.executeUpdate();
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Registro Eliminado");
+            }
+            cn.close();
+
+        } catch (SQLException e) {
+            System.err.println("Error en: " + e);
+        }
+        return res;
+    }
+    public int deleteAct(int id) throws SQLException {
+        Connection cn = getConexion();
+        String sql = "DELETE FROM MEDICIONES WHERE IDPERSONA =" + id;
+
+        int res = 0;
+        try {
+            psd = cn.prepareStatement(sql);
+            // psd.setInt(1, id);
+            res = psd.executeUpdate();
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Registro Eliminado");
+            }
+            cn.close();
+
+        } catch (SQLException e) {
+            System.err.println("Error en: " + e);
+        }
+        return res;
+    }
 
     private static int esNum(String cadena) {
         try {
@@ -614,4 +710,4 @@ public class PrincipalOriginal extends JFrame {
             return 0;
         }
     }
-}
+
