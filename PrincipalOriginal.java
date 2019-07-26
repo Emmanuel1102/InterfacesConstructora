@@ -44,12 +44,16 @@ import javax.swing.table.TableColumnModel;
 public class PrincipalOriginal extends JFrame {
 
     private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
-     private CardLayout Imagenes;
-    private  String nImagenes []={"C:\\Users\\Emmanuel\\Desktop\\manual\\m1.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m2.jpg"};
-    private Icon  icons[]={new ImageIcon(nImagenes[0]),new ImageIcon(nImagenes[1])};
+       private CardLayout Imagenes;
+    private  String nImagenes []={"C:\\Users\\Emmanuel\\Desktop\\manual\\m1.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m2.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m3.jpg",
+    		"C:\\Users\\Emmanuel\\Desktop\\manual\\m4.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m5.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m6.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m7.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m8.jpg","C:\\Users\\Emmanuel\\Desktop\\manual\\m9.jpg"
+    		,"C:\\Users\\Emmanuel\\Desktop\\manual\\m10.jpg"};
+    private Icon  icons[]={new ImageIcon(nImagenes[0]),new ImageIcon(nImagenes[1]),new ImageIcon(nImagenes[2]),new ImageIcon(nImagenes[3]),new ImageIcon(nImagenes[4]),new ImageIcon(nImagenes[5]),new ImageIcon(nImagenes[6]),new ImageIcon(nImagenes[7]),new ImageIcon(nImagenes[8])
+    ,new ImageIcon(nImagenes[9])};
     private JLabel la[];
 	 private JPanel ap[]; 
 	 int contar=0;
+	 ImageIcon Graficas = new ImageIcon("C:\\Users\\Emmanuel\\Desktop\\manual\\graf.png");
 
     PrincipalOriginal() {
         setSize(1366, 768);
@@ -557,11 +561,32 @@ public class PrincipalOriginal extends JFrame {
     }
 
     public JPanel Finanzas() {
-        Finanzas = new JPanel();
+             Finanzas = new JPanel();
+        Finanzas.setLayout(null);
         Finanzas.setBackground(Color.black);
         JLabel FinanzasMensaje = new JLabel("Gráficas de finanzas mesuales");
         FinanzasMensaje.setForeground(Color.white);
         Finanzas.add(FinanzasMensaje);
+        
+    	final JButton BotonGraf = new JButton();
+		 BotonGraf.setLayout(null);
+		 BotonGraf.setBorder(null);
+		 BotonGraf.setBackground(Color.black);
+		 BotonGraf.setBounds(132,50,1105,500);
+		 BotonGraf.setIcon(Graficas);
+        
+	BotonGraf.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent arg0) {
+			new Graficador();
+			 }
+			 
+			 });
+		 
+		 
+		 
+		 
+        Finanzas.add(BotonGraf);
+        
         return Finanzas;
     }
 
