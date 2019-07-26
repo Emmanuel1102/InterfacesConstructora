@@ -25,6 +25,22 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+  /**
+     * **VARIABLES DEL METODO MAQUINARIA
+     */
+    private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
+    ModeloTabla_Maquinaria modelo = new ModeloTabla_Maquinaria("Adminn", "admin");
+    TableRowSorter TRSFiltro = new TableRowSorter();
+    PreparedStatement psd, psd2;
+    JTable MaquinasT = new JTable(modelo);
+    JTextField busqueda;
+    String nombre_maq;
+    int modelo_maq;
+    double costo_maq;
+    String matricula_maq;
+    double Precio_renta_maq;
+
+
 public class PrincipalOriginal extends JFrame {
 
     private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
@@ -179,22 +195,12 @@ public class PrincipalOriginal extends JFrame {
         return bienvenido;
     }
 
-    public JPanel Maquinaria() {
+   public JPanel Maquinaria() {
 
         JPanel Maquinas = new JPanel();
         Maquinas.setLayout(null);
         Maquinas.setBackground(Color.black);
 
-        /*String[] Cabecera = {"NOMBRE", "TIPO", "MODELO", "COSTO", "ESTADO", "PRECIO DE RENTA"};
-        String[][] datos = {{"aj11", "Tractor", "2015", "$10000.00", "DISPONIBLE", "$4000.00"}};
-        DefaultTableModel modelo = new DefaultTableModel(datos, Cabecera) {
-            //La edicion de la tabla esta desactivada
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };*/
-        ModeloTabla_Maquinaria modelo = new ModeloTabla_Maquinaria("Adminn", "admin");
-        JTable MaquinasT = new JTable(modelo);
         //La reorganizacion de las colunmas se desactiva
         MaquinasT.getTableHeader().setReorderingAllowed(false);
         //La redimencion de las colunmas se desactiva
@@ -208,47 +214,59 @@ public class PrincipalOriginal extends JFrame {
         columnModel.getColumn(6).setPreferredWidth(50);
         MaquinasT.getTableHeader().setResizingAllowed(false);
         //Se Restinge la seleccion de las filas a solo una
-        MaquinasT.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        // MaquinasT.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane sc = new JScrollPane(MaquinasT);
         sc.setVisible(true);
         sc.setBounds(20, 70, 1000, 400);
         Maquinas.add(sc);
 
-        JTextField busqueda = new JTextField();
+        busqueda = new JTextField();
         busqueda.setForeground(Color.black);
         busqueda.setBounds(463, 15, 400, 30);
         Maquinas.add(busqueda);
 
         JLabel panelImagen = new JLabel();
-        panelImagen.setSize(200, 200);
+
+        panelImagen.setSize(
+                200, 200);
         panelImagen.setBackground(Color.BLUE);
-        panelImagen.setBounds(1100, 70, 200, 200);
+
+        panelImagen.setBounds(
+                1100, 70, 200, 200);
         Maquinas.add(panelImagen);
 
         JButton Buscar = new JButton("BUSCAR");
+
         Buscar.setBackground(Color.black);
         //entrar.setBounds(110, 350, 150, 50);
+
         Buscar.setBorder(new ComponenteBotonRedondo(40));
         Buscar.setForeground(Color.decode("#049cff"));
-        Buscar.setBounds(866, 15, 150, 30);
+        Buscar.setBounds(
+                866, 15, 150, 30);
         Maquinas.add(Buscar);
 
         JButton Agregar = new JButton("Agregar");
+
         Agregar.setBackground(Color.black);
-        Agregar.setBorder(new ComponenteBotonRedondo(40));
+
+        Agregar.setBorder(
+                new ComponenteBotonRedondo(40));
         Agregar.setForeground(Color.decode("#049cff"));
-        Agregar.setBounds(1050, 310, 140, 50);
+        Agregar.setBounds(
+                1050, 310, 140, 50);
         Maquinas.add(Agregar);
         //abre una nueva ventana para agregar una maquinaría
-        Agregar.addActionListener(new ActionListener() {
+
+        Agregar.addActionListener(
+                new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 new AgregarMaquinaria();
-                ModeloTabla_Maquinaria mt = new ModeloTabla_Maquinaria("Adminn", "admin");
-                mt.actualizaEstatus();
-
+                modelo.actualizaEstatus();
             }
-        });
+        }
+        );
 
         JButton Editar = new JButton("Editar");
         Editar.setBackground(Color.black);
@@ -257,99 +275,118 @@ public class PrincipalOriginal extends JFrame {
         Editar.setBounds(1200, 310, 140, 50);
         Maquinas.add(Editar);
         //abre una nueva venta para editar la maquinaría seleccionada
+        
         Editar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                int fila = MaquinasT.getSelectedRow();
 
-               /* int fila = MaquinasT.getSelectedRow();
-                if (fila < 1) {
+               
+                if (fila < 0) {
                     JOptionPane.showMessageDialog(null, "Seleccione un registro");
                 } else {
-                    
-                     Connection conexion=null;
-                    Object [] datos = new Object[10];
-                     int id_maq=Integer.parseInt(MaquinasT.getValueAt(fila, 0).toString());
-                    try{
-                        Statement stmt = conexion.createStatement();
-                        ResultSet rs = stmt.executeQuery("SELECT*FROM MAQUINARIA WHERE CLAVE_MAQ ="+id_maq);
-                        int contador = 0;
-                        while (rs.next()) {
-                            datos[0] = rs.getInt(1);
-                            datos[1] = rs.getString(2);
-                            datos[2] = rs.getString(3);
-                            datos[3] = rs.getInt(4);
-                            datos[4] = rs.getDouble(5);
-                            datos[5] = rs.getString(6);
-                            datos[6] = rs.getInt(7);
-                            datos[7] = rs.getDouble(8);
-                            datos[8] = rs.getString(9);
-                            datos[9] = rs.getBlob(10);
-                            //datos[contador][6] = rs.getBl(6)
-                            new EditarMaquinaria(datos[1].toString(),datos[2].toString(),
-                                    Integer.parseInt(datos[3].toString()),datos[4],datos[5],datos[6], datos[7],datos[8]);
-                            contador += 1;
-                        }
-                    } catch (Exception e) {
+                    int id_maq = Integer.parseInt(MaquinasT.getValueAt(fila, 0).toString());
+                    new EditarMaquinaria(id_maq);
 
-                    }
-                    String nombre = (String) MaquinasT.getValueAt(fila, 1);
-                    String tipo = MaquinasT.getValueAt(fila, 2).toString();
-                    int modelo = Integer.parseInt(MaquinasT.getValueAt(fila, 2).toString());
-                    double costo = Double.parseDouble(MaquinasT.getValueAt(fila, 3).toString());
-                    String estado = (String) MaquinasT.getValueAt(fila, 4);
-                    double precioRenta = Double.parseDouble(MaquinasT.getValueAt(fila, 5).toString());
-                    
                 }
-*/
-            }
-        });
 
-        JButton Eliminar = new JButton("Eliminar");
-        Eliminar.setBackground(Color.black);
-        Eliminar.setBorder(new ComponenteBotonRedondo(40));
-        Eliminar.setForeground(Color.decode("#049cff"));
-        Eliminar.setBounds(1050, 380, 140, 50);
-        Maquinas.add(Eliminar);
+            }
+        }
+        );
+        JButton Eliminar_maq = new JButton("Eliminar");
+        Eliminar_maq.setBackground(Color.black);
+        Eliminar_maq.setBorder(new ComponenteBotonRedondo(40));
+        Eliminar_maq.setForeground(Color.decode("#049cff"));
+        Eliminar_maq.setBounds(1050, 380, 140, 50);
         //Borra el registro de la base de datos
-        Eliminar.addActionListener(new ActionListener() {
+        Eliminar_maq.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent e) {
+                int fila = MaquinasT.getSelectedRow();
 
+                if (fila < 0) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un registro");
+                } else {
+
+                    int id = Integer.parseInt(MaquinasT.getValueAt(fila, 0).toString());
+                    String sql = "DELETE FROM MAQUINARIA WHERE CLAVE_MAQ = " + id;
+                    int res = 0;
+                    try {
+                        Connection cn = Clase_Conexion.getConexion();
+                        psd = cn.prepareStatement(sql);
+                        res = psd.executeUpdate();
+                        if (res > 0) {
+                            JOptionPane.showMessageDialog(null, "Registro Eliminado");
+                        }
+                        cn.close();
+                    } catch (SQLException ee) {
+                        System.err.println("Error en: " + ee);
+                    }
+                }
             }
         });
+        Maquinas.add(Eliminar_maq);
 
         /////nuevo    
         JButton Autorizar = new JButton("Autorizar");
+
         Autorizar.setBackground(Color.black);
+
         Autorizar.setBorder(new ComponenteBotonRedondo(40));
         Autorizar.setForeground(Color.decode("#049cff"));
-        Autorizar.setBounds(1200, 380, 140, 50);
+        Autorizar.setBounds(
+                1200, 380, 140, 50);
         Maquinas.add(Autorizar);
         //abre una nueva ventana para autorizar la salida de una máquina
-        Autorizar.addActionListener(new ActionListener() {
+
+        Autorizar.addActionListener(
+                new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent ae
+            ) {
                 new Autorizar();
             }
-        });
-        MaquinasT.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int fila = MaquinasT.getSelectedRow();
-                int id = Integer.parseInt(MaquinasT.getValueAt(fila, 0).toString());
-                ModeloTabla_Maquinaria mt = new ModeloTabla_Maquinaria("Adminn", "admin");
-                ImageIcon foto = mt.getImagen(id);
-                if (foto != null) {
-                    panelImagen.setIcon(foto);
-                } else {
-                    panelImagen.setText("No Existe una Imagen el la base de Datos");
+        }
+        );
+        
+        MaquinasT.getSelectionModel()
+                .addListSelectionListener(new ListSelectionListener() {
+                    @Override
+                    public void valueChanged(ListSelectionEvent ek
+                    ) {
+                        int fila = MaquinasT.getSelectedRow();
+                        int id = Integer.parseInt(MaquinasT.getValueAt(fila, 0).toString());
+                        ModeloTabla_Maquinaria mt = new ModeloTabla_Maquinaria("Adminn", "admin");
+                        ImageIcon foto = mt.getImagen(id);
+                        if (foto != null) {
+                            panelImagen.setIcon(foto);
+                        } else {
+                            panelImagen.setText("No Existe una Imagen el la base de Datos");
+                        }
+                        panelImagen.updateUI();
+                        panelImagen.repaint();
+                    }
                 }
-                panelImagen.updateUI();
-                panelImagen.repaint();
+                );
+
+        busqueda.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                modelo.actualizaEstatus(busqueda.getText());
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                modelo.actualizaEstatus(busqueda.getText());
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                modelo.actualizaEstatus(busqueda.getText());
             }
         });
-        return Maquinas;
 
+        return Maquinas;
     }
 
     public JPanel Obras() {
