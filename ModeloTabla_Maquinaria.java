@@ -15,8 +15,8 @@ public class ModeloTabla_Maquinaria extends AbstractTableModel {
 
     private Connection conexion;
 
-    String encabezados[] = new String[]{
-        "Clave","NOMBRE", "TIPO", "MODELO", "COSTO", "ESTADO", "PRECIO DE RENTA"
+    static String encabezados[] = new String[]{
+        "CLAVE","NOMBRE", "TIPO", "MODELO", "COSTO", "ESTADO", "PRECIO DE RENTA"
     };
 
     Class tipos[] = new Class[]{
@@ -27,7 +27,6 @@ public class ModeloTabla_Maquinaria extends AbstractTableModel {
     public ModeloTabla_Maquinaria(String Usuario, String Contraseña) {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            /**Adminn es usuario y admin es el pasword*/
             conexion = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Constructora", Usuario, Contraseña);
             System.out.println("Se concecto Correctamente ");
 
@@ -35,6 +34,7 @@ public class ModeloTabla_Maquinaria extends AbstractTableModel {
             System.err.println("Hubo un error en la instalacion " + e);
         }
         actualizaEstatus();
+        actualizaEstatus("");
     }
 
     // solo los metodos getRowCount( ), getColumnCount( ),y  getValueAt( ) son requeridos
@@ -101,6 +101,56 @@ public class ModeloTabla_Maquinaria extends AbstractTableModel {
 //  usa el modelo de tabla creada por el usuario
         fireTableDataChanged();
     }
+     public void actualizaEstatus(String nombre) {
+        datos = new Object[getTotal()][encabezados.length];
+        try {
+            Statement stmt = conexion.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT CLAVE_MAQ,NOMBRE_MAQ,TIPO_MAQ,MODELO_MAQ,COSTO_MAQ,ESTADO_MAQ,PRECIORENTA_MAQ FROM MAQUINARIA WHERE TIPO_MAQ LIKE '%"+nombre+"%'");
+            int contador = 0;
+            while (rs.next()) {
+                datos[contador][0] = rs.getInt(1);
+                datos[contador][1] = rs.getString(2);
+                datos[contador][2] = rs.getString(3);
+                datos[contador][3] = rs.getInt(4);
+                datos[contador][4] = rs.getDouble(5);
+                datos[contador][5] = rs.getString(6);
+                datos[contador][6] = rs.getDouble(7);
+                //datos[contador][6] = rs.getBl(6)
+
+                contador += 1; 
+            }
+        } catch (Exception e) {
+
+        }
+//  usa el modelo de tabla creada por el usuario
+        fireTableDataChanged();
+    }
+
+      public  void actualizaEstatus(int id) {
+        datos = new Object[getTotal()][encabezados.length];
+        try {
+            Statement stmt = conexion.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT CLAVE_MAQ,NOMBRE_MAQ,MODELO_MAQ,COSTO_MAQ,ESTADO_MAQ,PRECIORENTA_MAQ,MATRICULA_MAQ FROM MAQUINARIA WHERE CLAVE_MAQ = " + id);
+            int contador = 0;
+            while (rs.next()) {
+                datos[contador][0] = rs.getInt(1);
+                datos[contador][1] = rs.getString(2);
+                datos[contador][2] = rs.getString(3);
+                datos[contador][3] = rs.getInt(4);
+                datos[contador][4] = rs.getDouble(5);
+                datos[contador][5] = rs.getString(6);
+                datos[contador][6] = rs.getDouble(7);
+                datos[contador][7] = rs.getString(8);
+                
+             
+                contador += 1; 
+            }
+        } catch (Exception e) {
+
+        }
+//  usa el modelo de tabla creada por el usuario
+        fireTableDataChanged();
+    }
 
     public  ImageIcon getImagen(int id) {
         String sql = "SELECT IMAGEN_MAQ FROM MAQUINARIA WHERE CLAVE_MAQ = " + id;
@@ -120,3 +170,5 @@ public class ModeloTabla_Maquinaria extends AbstractTableModel {
         return ic;
     }
 }
+
+ 
