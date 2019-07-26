@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,8 +22,8 @@ public class AgregarCliente extends JFrame {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
             conexion = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Construct", "Adminn", "Admin");
-            JOptionPane.showMessageDialog(null,
-                    "¡Registro guardado exitosamente!");
+           // JOptionPane.showMessageDialog(null,
+         //           "¡Registro guardado exitosamente!");
         } catch (ClassNotFoundException | SQLException | HeadlessException e) {
             JOptionPane.showMessageDialog(null,
                     "Hubo un error en la instalacion" + e);
@@ -193,12 +194,10 @@ public class AgregarCliente extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Connection cn;
-                    Connection cn2;
-                    cn2 = getConexion();
                     cn = getConexion();
                     // Se realian las consultas en la BDD
                     psd = cn.prepareStatement("INSERT INTO CLIENTE (NOMBRE_CLIENTE,NUMERO_CALLE,CALLE,COLONIA,MUNICIPIO,ESTADO,CORREO,TELEFONO) VALUES(?,?,?,?,?,?,?,?)");
-
+                        
                     psd.setString(1, NombreResponsabletxt.getText());
                     psd.setString(2, Numtxt.getText());
                     psd.setString(3, Calletxt.getText());
@@ -208,15 +207,30 @@ public class AgregarCliente extends JFrame {
                     psd.setString(7, Correotxt.getText());
                     psd.setString(8, Telefonotxt.getText());
 
-                    int res = psd.executeUpdate();
-                    if (res < 0) {
-                        JOptionPane.showMessageDialog(null, "No se pudo añadir el registro");
-                    }
-                    cn.close();
+                   int res = psd.executeUpdate();
+            if(res>0 ){
+                JOptionPane.showMessageDialog(null, "Registro Guardado Exitosamente");
+              
+            } else {
+                 JOptionPane.showMessageDialog(null, "Error");
+               
+            }
+            
+            cn.close();
 
                 } catch (SQLException ex) {
                     System.err.println("Error en: " + ex);
                 }
+//                 se agregan datos a la tabla de clientes de la interfaz PrincipalOriginal en el
+//                 apartado de clientes:
+                
+                PrincipalOriginal p = new PrincipalOriginal();
+                //p.Clientes();
+                
+                
+                
+                
+                
 
             }
         });
