@@ -1,4 +1,5 @@
 
+
 import java.awt.*;
 
 import javax.swing.*;
@@ -129,18 +130,20 @@ public class AgregarMaquinaria extends JFrame {
         MatriculaTxt.setBounds(161, 290, 200, 30);
         DatosMaquinaria.add(MatriculaTxt);
 
-        JLabel Marca = new JLabel("Marca:");
-        Marca.setForeground(Color.white);
+        JLabel precio_renta = new JLabel("Precio Renta:");
+        precio_renta.setForeground(Color.white);
         Font fuenteMarca = new Font("Arial", Font.BOLD, 14);
-        Marca.setFont(fuenteMarca);
-        Marca.setBounds(0, 270, 300, 150);
-        DatosMaquinaria.add(Marca);
+        precio_renta.setFont(fuenteMarca);
+        precio_renta.setBounds(0, 270, 300, 150);
+        DatosMaquinaria.add(precio_renta);
 
-        JTextField MarcaTxt = new JTextField();
-        MarcaTxt.setForeground(Color.black);
-        MarcaTxt.setBorder(null);
-        MarcaTxt.setBounds(161, 334, 200, 30);
-        DatosMaquinaria.add(MarcaTxt);
+        CampoDato precio_rentaTxt = new CampoDato();
+        precio_rentaTxt.setForeground(Color.black);
+        precio_rentaTxt.setBorder(null);
+        precio_rentaTxt.setTipo('D');
+        precio_rentaTxt.setLongitud(15);
+        precio_rentaTxt.setBounds(161, 334, 200, 30);
+        DatosMaquinaria.add(precio_rentaTxt);
 
         ///////        // En esta parte van los estados, los que deben ser: EN USO, DISPONIBLE y MANTENIMIENTO
         JLabel EstadoMaquinaAgregar = new JLabel(" Estado: ");
@@ -157,19 +160,7 @@ public class AgregarMaquinaria extends JFrame {
         EstadoMaquinatxtAgregar.setBounds(427, 92, 150, 30);
         DatosMaquinaria.add(EstadoMaquinatxtAgregar);
 
-        JLabel ePrecioRenta = new JLabel("Precio de Renta");
-        ePrecioRenta.setForeground(Color.WHITE);
-        Font fuenteRenta = new Font(" Arial ", Font.BOLD, 14);
-        EstadoMaquinaAgregar.setFont(fuenteMaquinaC);
-        ePrecioRenta.setBounds(375, 70, 60, 30);
-        DatosMaquinaria.add(ePrecioRenta);
-
-        CampoDato dPrecioRenta = new CampoDato();
-        dPrecioRenta.setTipo('D');
-        dPrecioRenta.setLongitud(15);
-        dPrecioRenta.setBounds(440, 70, 200, 30);
-        DatosMaquinaria.add(dPrecioRenta);
-
+     
         ///////Botones
         JButton AgregarMaquina = new JButton("Agregar maquinaría");
         AgregarMaquina.setBackground(Color.decode("#049cff"));
@@ -187,9 +178,9 @@ public class AgregarMaquinaria extends JFrame {
                 String tipo = (String) TipoCombo.getSelectedItem();
                 double costo = Integer.parseInt(CostoTxt.getText());
                 String matricula = MatriculaTxt.getText();
-                String marca = MarcaTxt.getText();
+                //String marca = .getText();
                 String estado = EstadoMaquinatxtAgregar.getSelectedItem().toString();
-                double precio_renta = Double.parseDouble(dPrecioRenta.getText());
+                double precio_renta = Double.parseDouble(precio_rentaTxt.getText());
                
                 try {
                     Connection cn;
