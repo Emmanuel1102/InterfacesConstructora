@@ -1,8 +1,19 @@
+
 import java.awt.*;
 import javax.swing.*;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,6 +21,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LoginOriginal extends JFrame {
+
+    String usua, contrasenia, correo_e;
 
     LoginOriginal() {
         /// Atributos básicos de la ventana 
@@ -90,8 +103,17 @@ public class LoginOriginal extends JFrame {
         Recuperar.setBorder(null);
         Recuperar.setForeground(Color.decode("#049cff"));
         login.add(Recuperar);
+        Recuperar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Recuperador r = new Recuperador();
+                r.setVisible(true);
+                dispose();
+            }
 
-        ImageIcon background_image = new ImageIcon("C:\\Users\\Adan Sanchez\\Documents\\NetBeansProjects\\Fun_Ing_Soft\\src\\InterfacesConstructora\\neo3.jpg");
+        });
+
+        ImageIcon background_image = new ImageIcon("C:\\Users\\Bayer\\Pictures\\InterfacesConstructora-master\\neoo3.jpg");
         Image img = background_image.getImage();
         Image temp_img = img.getScaledInstance(1366, 768, Image.SCALE_SMOOTH);
         background_image = new ImageIcon(temp_img);
@@ -103,10 +125,107 @@ public class LoginOriginal extends JFrame {
         add(background);
 
         setVisible(true);
+
+        JLabel mensaje_error = new JLabel();
+        mensaje_error.setBounds(35, 160, 300, 30);
+        login.add(mensaje_error);
+        JLabel contrasenia_error = new JLabel();
+        contrasenia_error.setBounds(35, 290, 300, 30);
+        login.add(contrasenia_error);
+        entrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String user = usuario.getText();
+                try {
+                    Connection cn = getConexion();
+                    Statement stmn = cn.createStatement();
+                    ResultSet rs = stmn.executeQuery("SELECT*FROM Usuario WHERE USUARIOO ='" + user + "'");
+                    rs.next();
+                    usua = rs.getString("USUARIOO");
+                    contrasenia = rs.getString("PASWORD");
+                    correo_e = rs.getString("CORREO");
+                    if (usuario.getText().equalsIgnoreCase(usua)) {
+                        if (contraseña.getText().equals(contrasenia)) {
+                            JOptionPane.showMessageDialog(null, "Presiona Aceptar para continuar");
+                            PrincipalOriginal p = new PrincipalOriginal();
+                            p.setVisible(true);
+                            dispose();
+                        } else {
+                            contrasenia_error.setText("Contraseña Incorrecta! Intentelo de nuevo");
+                            contrasenia_error.setFont(new Font("Arial", Font.BOLD, 15));
+                            contrasenia_error.setForeground(Color.RED);
+                        }
+                    } else {
+                        mensaje_error.setText("Usuario incorrecto  o Registre uno nuevo");
+                        mensaje_error.setFont(new Font("Arial", Font.BOLD, 15));
+                        mensaje_error.setForeground(Color.RED);
+                    }
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Usuario y Contraseña son Incorrectos");
+                    mensaje_error.setText("");
+                    contrasenia_error.setText("");
+                }
+
+            }
+        });
+        contraseña.addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String user = usuario.getText();
+                    try {
+                        Connection cn = getConexion();
+                        Statement stmn = cn.createStatement();
+                        ResultSet rs = stmn.executeQuery("SELECT*FROM Usuario WHERE USUARIOO ='" + user + "'");
+                        rs.next();
+                        usua = rs.getString("USUARIOO");
+                        contrasenia = rs.getString("PASWORD");
+                        correo_e = rs.getString("CORREO");
+                        if (usuario.getText().equalsIgnoreCase(usua)) {
+                            if (contraseña.getText().equals(contrasenia)) {
+                               
+                                PrincipalOriginal p = new PrincipalOriginal();
+                                p.setVisible(true);
+                                dispose();
+                            } else {
+                                contrasenia_error.setText("Contraseña Incorrecta! Intentelo de nuevo");
+                                contrasenia_error.setFont(new Font("Arial", Font.BOLD, 15));
+                                contrasenia_error.setForeground(Color.RED);
+                            }
+                        } else {
+                            mensaje_error.setText("Usuario incorrecto  o Registre uno nuevo");
+                            mensaje_error.setFont(new Font("Arial", Font.BOLD, 15));
+                            mensaje_error.setForeground(Color.RED);
+                        }
+                        
+
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Usuario y Contraseña son Incorrectos");
+                    }
+                }
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    System.exit(0);
+                }
+            }
+        });
+
     }
 
     public static void main(String[] args) {
         new LoginOriginal();
     }
 
+    public static Connection getConexion() {
+        Connection conexion = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conexion = (Connection) DriverManager.getConnection("jdbc:mysql://ns64.hostgator.mx:3306/dirtycod_constructora?autoReconnect=true&useSSL=false", "dirtycod_dirty", "dirtycode");
+            System.out.println("Se concecto Correctamente ");
+        } catch (Exception e) {
+            System.err.println("Hubo un error en la instalacion " + e);
+        }
+        return conexion;
+    }
 }
