@@ -63,6 +63,9 @@ public class PrincipalOriginal extends JFrame {
 	 private JPanel ap[]; 
 	 int contar=0;
 	 ImageIcon Graficas = new ImageIcon("C:\\Users\\Emmanuel\\Desktop\\manual\\graf.png");
+   /***Aca va el icono de cerrar sesion y el logo que se ve alado, la imagen de la constructora*/
+	ImageIcon cerrar = new ImageIcon("C:\\Users\\Bayer\\Documents\\cerrar2.png");
+    ImageIcon Empresa = new ImageIcon("C:\\Users\\Bayer\\Documents\\logo.png");
 
     PrincipalOriginal() {
         setSize(1366, 768);
@@ -70,17 +73,53 @@ public class PrincipalOriginal extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
 
+        JPanel cabecera;
+        cabecera = new JPanel();
+        cabecera.setBackground(Color.black);
+        cabecera.setBounds(1200, 20,140, 60);
+        setLayout(null);
+        JPanel logo;
+        logo = new JPanel();
+        logo.setBackground(Color.black);
+        logo.setBounds(90, 0, 1200, 114);
+        setLayout(null);
+
+        JLabel MeterLogo = new JLabel();
+        MeterLogo.setBounds(0, 0, 1200, 113);
+        MeterLogo.setBorder(null);
+        MeterLogo.setIcon(Empresa);
+        logo.add(MeterLogo);
+
+        JLabel etiqueta_cerrarSesion=new JLabel("Cerrar Sesion");
+        etiqueta_cerrarSesion.setBounds(0, 0,30,30);
+        etiqueta_cerrarSesion.setForeground(Color.WHITE);
+        cabecera.add(etiqueta_cerrarSesion);
+    
+        JButton cerrarSesion = new JButton();
+        cerrarSesion.setBackground(Color.black);
+        cerrarSesion.setBounds(60, 0, 90,90);
+        cerrarSesion.setBorder(null);
+        cerrarSesion.setForeground(Color.white);
+        cerrarSesion.setIcon(cerrar);
+        cabecera.add(cerrarSesion);
+
+        cerrarSesion.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginOriginal login = new LoginOriginal();
+                login.setVisible(true);
+                dispose();
+            }
+        });
+
         JPanel principal = new JPanel();
         principal.setLayout(null);
-
         principal.setBackground(Color.black);
-        principal.setBounds(0, 115, 1366, 768);
+        principal.setBounds(0, 0, 1366, 768);
+        principal.add(cabecera);
+        principal.add(logo);
 
-        ImageIcon background_image = new ImageIcon("C:\\Users\\Bayer\\Documents\\NetBeansProjects\\Constructora_Adan\\neo3.jpg");
-        Image img = background_image.getImage();
-        Image temp_img = img.getScaledInstance(1366, 768, Image.SCALE_SMOOTH);
-        background_image = new ImageIcon(temp_img);
-        JLabel background = new JLabel("", background_image, JLabel.CENTER);
+        JLabel background = new JLabel();
         background.add(principal);
         background.setBounds(0, 0, 1366, 768);
         add(background);
@@ -89,19 +128,19 @@ public class PrincipalOriginal extends JFrame {
          * Parte donde se agregan las Pestañas
          */
         JTabbedPane tabla = new JTabbedPane();
-        tabla.setBounds(0, 0, 1366, 768);
+        tabla.setBounds(0, 115, 1366, 768);
         principal.add(tabla);
         tabla.addTab("Bienvenido al sistema ", bienvenido());
-        tabla.addTab("Maquinaria", Maquinaria());
-        tabla.addTab("Obras", Obras());
-        tabla.addTab("Clientes", Clientes());
-        tabla.addTab("Finanzas", Finanzas());
+        tabla.addTab("Maquinaria", Maquinarias());
+        tabla.addTab("Obras", Obra());
+        tabla.addTab("Clientes", Cliente());
+        tabla.addTab("Finanzas", Finanza());
 
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         new PrincipalOriginal();
-    }
+    }*/
 
     public JPanel bienvenido() {
         
