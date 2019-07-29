@@ -28,29 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
-  /**
-     * **VARIABLES DEL METODO MAQUINARIA
-     */
-//private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
-   
-
-public class PrincipalOriginal extends JFrame {
-    //ModeloTabla_Cliente model= ModeloTabla_Cliente();
-    public Connection getConexion() throws SQLException {
-        Connection conexion = null;
-        try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            conexion = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Construct", "Adminn", "Admin");
-           // JOptionPane.showMessageDialog(null,
-         //           "¡Registro guardado exitosamente!");
-        } catch (ClassNotFoundException | HeadlessException e) {
-            JOptionPane.showMessageDialog(null,
-                    "Hubo un error en la instalacion" + e);
-
-        }
-        return conexion;
-    }
-     ModeloTabla_Maquinaria modelo = new ModeloTabla_Maquinaria(); 
+ModeloTabla_Maquinaria modelo = new ModeloTabla_Maquinaria(); 
     PreparedStatement psd;
     private JPanel bienvenido, Maquinaria, Obras, Clientes, Finanzas;
        private CardLayout Imagenes;
@@ -63,7 +41,7 @@ public class PrincipalOriginal extends JFrame {
 	 private JPanel ap[]; 
 	 int contar=0;
 	 ImageIcon Graficas = new ImageIcon("C:\\Users\\Emmanuel\\Desktop\\manual\\graf.png");
-   /***Aca va el icono de cerrar sesion y el logo que se ve alado, la imagen de la constructora*/
+      /***Aca va el icono de cerrar sesion y el logo que se ve alado, la imagen de la constructora*/
 	ImageIcon cerrar = new ImageIcon("C:\\Users\\Bayer\\Documents\\cerrar2.png");
     ImageIcon Empresa = new ImageIcon("C:\\Users\\Bayer\\Documents\\logo.png");
 
@@ -756,3 +734,4 @@ public class PrincipalOriginal extends JFrame {
         }
     }
 
+}
