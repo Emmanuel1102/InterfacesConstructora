@@ -1,49 +1,45 @@
+
 import java.awt.*;
-
 import javax.swing.*;
-
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.FileInputStream;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.imageio.ImageIO;
-
-//import componentetextfield.CampoDato;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
-import javax.swing.border.Border;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class EditarMaquinaria extends JFrame {
 
-    //PrincipalOriginal pp = new PrincipalOriginal();
-    static CampoDato dPrecioRenta;
-    static JTextField MatriculaTxtEditar;
-    static CampoDato CostoTxtEditar;
-    static CampoDato ModelotxtEditar;
-    static JTextField NombreMaquinatxtEditar;
-    static JTextField marca_Maquinaria;
+    JTextField MatriculaTxtEditar;
+    CampoDato CostoTxtEditar;
+    CampoDato ModelotxtEditar;
+    JTextField NombreMaquinatxtEditar;
+    JTextField marca_Maquinaria;
     FileInputStream fis;
     int longitud_bytes;
     PreparedStatement psd;
-    ModeloTabla_Maquinaria modelo=new ModeloTabla_Maquinaria("Adminn", "admin");
-    
-    public EditarMaquinaria(int id) {
+    ModeloTabla_Maquinaria modelo = new ModeloTabla_Maquinaria();
+    Connection cn = Clase_Conexion.getConexion();
+    String indice_Estado, indice_Tipo_maq;
+    String[] tiposMaquinas = {"Excavadora", "Revolvedora", "Volteo", "Retroexcavadora", "Tractores", "Monta Cargas", "Pavimentadora", "Compactadora", "Motoniveladora", "volquetas", "Cargadora", "Otro"};
+    int maq, estado;
+    String tiposEstados[] = {"EN USO", "DISPONIBLE", "MANTENIMIENTO"};
+
+    public EditarMaquinaria(int id, String name, String tipo, int modelo_maq, double costo_maq, String estado, double renta_maq) {
 
         setSize(860, 500);
         setTitle("Editar maquinarias");
         setResizable(false);
-        //setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
 
         JPanel DatosMaquinaria = new JPanel();
@@ -74,7 +70,7 @@ public class EditarMaquinaria extends JFrame {
         NombreMaquinaEditar.setBounds(0, 30, 300, 150);
         DatosMaquinaria.add(NombreMaquinaEditar);
 
-        NombreMaquinatxtEditar = new JTextField();
+        NombreMaquinatxtEditar = new JTextField(name);
         NombreMaquinatxtEditar.setForeground(Color.black);
         NombreMaquinatxtEditar.setBorder(null);
         NombreMaquinatxtEditar.setBounds(163, 92, 200, 30);
@@ -87,8 +83,7 @@ public class EditarMaquinaria extends JFrame {
         ModeloEditar.setBounds(0, 75, 300, 150);
         DatosMaquinaria.add(ModeloEditar);
 
-        //JTextField ModelotxtEditar = new JTextField(String.valueOf(modelo));        
-        ModelotxtEditar = new CampoDato();
+        ModelotxtEditar = new CampoDato(String.valueOf(modelo_maq));
         ModelotxtEditar.setForeground(Color.black);
         ModelotxtEditar.setBorder(null);
         ModelotxtEditar.setBounds(164, 140, 200, 30);
@@ -103,8 +98,8 @@ public class EditarMaquinaria extends JFrame {
         TipoEditar.setBounds(0, 125, 300, 150);
         DatosMaquinaria.add(TipoEditar);
 
-        String[] tiposMaquinas = {"Excavadora", "Revolvedora", "Volteo"};
         JComboBox TipoComboEditar = new JComboBox(tiposMaquinas);
+        TipoComboEditar.setSelectedItem(tipo);
         TipoComboEditar.setForeground(Color.black);
         TipoComboEditar.setBorder(null);
         TipoComboEditar.setBounds(161, 190, 200, 30);
@@ -117,7 +112,7 @@ public class EditarMaquinaria extends JFrame {
         CostoEditar.setBounds(0, 170, 300, 150);
         DatosMaquinaria.add(CostoEditar);
 
-        CostoTxtEditar = new CampoDato();
+        CostoTxtEditar = new CampoDato(String.valueOf(costo_maq));
         CostoTxtEditar.setForeground(Color.black);
         CostoTxtEditar.setBorder(null);
         CostoTxtEditar.setBounds(161, 238, 200, 30);
@@ -132,7 +127,7 @@ public class EditarMaquinaria extends JFrame {
         MatriculaEditar.setBounds(0, 220, 300, 150);
         DatosMaquinaria.add(MatriculaEditar);
 
-        MatriculaTxtEditar = new JTextField();
+        MatriculaTxtEditar = new JTextField(getDato("SELECT*FROM Maquinaria WHERE CLAVE_MAQ =" + id, 8));
         MatriculaTxtEditar.setForeground(Color.black);
         MatriculaTxtEditar.setBorder(null);
         MatriculaTxtEditar.setBounds(161, 290, 200, 30);
@@ -145,7 +140,7 @@ public class EditarMaquinaria extends JFrame {
         MarcaEditar.setBounds(0, 270, 300, 150);
         DatosMaquinaria.add(MarcaEditar);
 
-        CampoDato RentaTxtEditar = new CampoDato();
+        CampoDato RentaTxtEditar = new CampoDato(String.valueOf(renta_maq));
         RentaTxtEditar.setForeground(Color.black);
         RentaTxtEditar.setBorder(null);
         RentaTxtEditar.setBounds(161, 334, 200, 30);
@@ -160,8 +155,8 @@ public class EditarMaquinaria extends JFrame {
         EstadoMaquinaAgregar.setBounds(375, 30, 300, 150);
         DatosMaquinaria.add(EstadoMaquinaAgregar);
 
-        String tiposEstados[] = {"EN USO", "DISPONIBLE", "MANTENIMIENTO"};
         JComboBox EstadoMaquinatxtAgregar = new JComboBox(tiposEstados);
+        EstadoMaquinatxtAgregar.setSelectedItem(estado);
         EstadoMaquinatxtAgregar.setForeground(Color.black);
         EstadoMaquinatxtAgregar.setBorder(null);
         EstadoMaquinatxtAgregar.setBounds(427, 92, 150, 30);
@@ -178,51 +173,49 @@ public class EditarMaquinaria extends JFrame {
         AgregarMaquinaria.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //dispose();
-                String nombre = NombreMaquinatxtEditar.getText();
-                int modelo_maq = Integer.parseInt(ModelotxtEditar.getText());
-                String tipo = (String) TipoComboEditar.getSelectedItem();
-                double costo = Integer.parseInt(CostoTxtEditar.getText());
-                String matricula = MatriculaTxtEditar.getText();
-                //String marca = MarcaTxt.getText();
-                String estado = EstadoMaquinatxtAgregar.getSelectedItem().toString();
-                double precio_renta = Double.parseDouble(dPrecioRenta.getText());
-                ModeloTabla_Maquinaria m =new ModeloTabla_Maquinaria("Adminn","admin");
-                m.actualizaEstatus(id);
-                System.out.println(nombre);
-                try {
-                    Connection cn;
-                    cn =Clase_Conexion.getConexion();
-                    psd = cn.prepareStatement("UPDATE MAQUINARIA SET NOMBRE_MAQ=?,TIPO_MAQ=?,MODELO_MAQ=?,COSTO_MAQ=?,ESTADO_MAQ=?,PRECIORENTA_MAQ=?,MATRICULA_MAQ=?,IMAGEN_MAQ=? WHERE CLAVE_MAQ= "+id);
-                    psd.setString(1, nombre);
-                    psd.setString(2, tipo);
-                    psd.setInt(3, modelo_maq);
-                    psd.setDouble(4, costo);
-                    psd.setString(5, estado);
-                    psd.setDouble(6, precio_renta);
-                    psd.setString(7, matricula);
-                    
-                    psd.setBlob(8, fis, getLongitud());
-                    int res = psd.executeUpdate();
-                    
-                   if (res < 0) {
-                        JOptionPane.showMessageDialog(null, "No se pudo añadir el registro");
+                //Validar si los datos estan vacios va a mandar una alerta para rellenarlos
+                if (!(NombreMaquinatxtEditar.getText().isEmpty() || ModelotxtEditar.getText().isEmpty()
+                        || TipoComboEditar.getSelectedItem().toString() == null || CostoTxtEditar.getText().isEmpty()
+                        || MatriculaTxtEditar.getText().isEmpty() || RentaTxtEditar.getText().isEmpty())) {
+
+                    String nombre = NombreMaquinatxtEditar.getText();
+                    int modelo_maq = Integer.parseInt(ModelotxtEditar.getText());
+                    String tipo = (String) TipoComboEditar.getSelectedItem();
+                    double costo = Double.parseDouble(CostoTxtEditar.getText());
+                    String matricula = MatriculaTxtEditar.getText();
+                    String estado = EstadoMaquinatxtAgregar.getSelectedItem().toString();
+                    double precio_renta = Double.parseDouble(RentaTxtEditar.getText());
+                    ModeloTabla_Maquinaria m = new ModeloTabla_Maquinaria();
+                    m.actualizaEstatus(id);//Consulta la BD para la imagen
+                    try {
+                        Connection cn;
+                        cn = Clase_Conexion.getConexion();
+                        psd = cn.prepareStatement("UPDATE Maquinaria SET NOMBRE_MAQ=?,TIPO_MAQ=?,MODELO_MAQ=?,COSTO_MAQ=?,ESTADO_MAQ=?,PRECIO_RENTA=?,MATRICULA_MAQ=?,IMAGEN_MAQ=? WHERE CLAVE_MAQ= " + id);
+                        psd.setString(1, nombre);
+                        psd.setString(2, tipo);
+                        psd.setInt(3, modelo_maq);
+                        psd.setDouble(4, costo);
+                        psd.setString(5, estado);
+                        psd.setDouble(6, precio_renta);
+                        psd.setString(7, matricula);
+                        psd.setBlob(8, fis, getLongitud());
+                        int res = psd.executeUpdate();
+                        if (res < 0) {
+                            JOptionPane.showMessageDialog(null, "No se pudo Actualizar");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Se Actualizo Correctamente");
+                        }
+                        cn.close();
+                        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        modelo.actualizaEstatus();
+                        dispose();
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(null, "Error en: " + e);
                     }
-                    JOptionPane.showMessageDialog(null, "Registro Exitoso");
-                    cn.close();
-                    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    modelo.actualizaEstatus();
-                } catch (SQLException e) {
-                    System.err.println("Error en: " + e);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Alguno de los campos esta vacio revise");
                 }
-
-                //modelo.actualizaEstatus();
-                //dispose();
             }
-
-                
-
-            
         });
 
         JButton AgregarFoto = new JButton("Agregar foto");
@@ -241,11 +234,9 @@ public class EditarMaquinaria extends JFrame {
                     try {
                         fis = new FileInputStream(jfc.getSelectedFile());
                         longitud_bytes = (int) jfc.getSelectedFile().length();
-
                         Image icono = ImageIO.read(jfc.getSelectedFile()).getScaledInstance(Imagen.getWidth(), Imagen.getHeight(), Image.SCALE_DEFAULT);
                         Imagen.setIcon(new ImageIcon(icono));
                         Imagen.updateUI();
-
                         setLongitud(longitud_bytes);
                     } catch (Exception ee) {
                     }
@@ -257,13 +248,54 @@ public class EditarMaquinaria extends JFrame {
         background.add(DatosMaquinaria);
         add(background);
         setVisible(true);
+    }
 
+    public void setLongitud(int longi) {
+        longitud_bytes = longi;
     }
-public void setLongitud(int longi){
-        longitud_bytes=longi;
-    }
-    public int getLongitud(){
+
+    public int getLongitud() {
         return longitud_bytes;
     }
 
+    public String getDato(String sql, int columna) {
+        String dato = null;
+        Statement stmn;
+        try {
+            stmn = cn.createStatement();
+            ResultSet rs = stmn.executeQuery(sql);
+            rs.next();
+            dato = String.valueOf(rs.getObject(columna));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error");
+        }
+        return dato;
+    }
+
+    public void setTipo_maq(String indice) {
+        indice_Estado = indice;
+        for (int i = 0; i < tiposMaquinas.length; i++) {
+            if (indice_Estado == tiposMaquinas[i]) {
+                maq = i;
+
+            }
+        }
+    }
+
+    public int getTipo() {
+        return maq;
+    }
+
+    public void setEstado_maq(String indice) {
+        indice_Tipo_maq = indice;
+        for (int i = 0; i < tiposEstados.length; i++) {
+            if (indice_Tipo_maq == tiposEstados[i]) {
+                estado = i;
+            }
+        }
+    }
+
+    public int getEstado() {
+        return estado;
+    }
 }
