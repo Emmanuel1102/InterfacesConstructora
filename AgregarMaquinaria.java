@@ -1,39 +1,36 @@
 
-
 import java.awt.*;
-
 import javax.swing.*;
-
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import static java.awt.image.ImageObserver.PROPERTIES;
 import java.io.FileInputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.imageio.ImageIO;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
+/**
+ * La clase Agregar Maquinaria es una consecuencia de presionar el boton agregar
+ * maquinaria en la interfaz principal y permite insertar maquinarias a la tabla
+ * y base de datos y seleccionar imagenes
+ *
+ * @author DirtyCode
+ */
 public class AgregarMaquinaria extends JFrame {
 
     PreparedStatement psd, psd2;
-    ModeloTabla_Maquinaria mt = new ModeloTabla_Maquinaria("Adminn", "admin");
+    ModeloTabla_Maquinaria mt = new ModeloTabla_Maquinaria();
     private FileInputStream fis; //Aca se almacena el flujo del archivo
-    int longitud_bytes;
+    int longitud_bytes;//longitud se bytes del archivo leido
 
     AgregarMaquinaria() {
-
         setSize(860, 500);
         setTitle("Agregar maquinarias");
         setResizable(false);
@@ -95,7 +92,7 @@ public class AgregarMaquinaria extends JFrame {
         Tipo.setBounds(0, 125, 300, 150);
         DatosMaquinaria.add(Tipo);
 
-        String[] tiposMaquinas = {"Excavadora", "Revolvedora", "Volteo"};
+        String[] tiposMaquinas = {"Excavadora", "Revolvedora", "Volteo", "Retroexcavadora", "Tractores", "Monta Cargas", "Pavimentadora", "Compactadora", "Motoniveladora", "volquetas", "Cargadora", "Otro"};
         JComboBox TipoCombo = new JComboBox(tiposMaquinas);
         TipoCombo.setForeground(Color.black);
         TipoCombo.setBorder(null);
@@ -153,15 +150,14 @@ public class AgregarMaquinaria extends JFrame {
         EstadoMaquinaAgregar.setBounds(375, 30, 300, 30);
         DatosMaquinaria.add(EstadoMaquinaAgregar);
 
-        String tiposEstados[] = {" EN USO ", " DISPONIBLE ", " MANTENIMIENTO "};
+        String tiposEstados[] = {"EN USO", "DISPONIBLE", "MANTENIMIENTO"};
         JComboBox EstadoMaquinatxtAgregar = new JComboBox(tiposEstados);
         EstadoMaquinatxtAgregar.setForeground(Color.BLACK);
         EstadoMaquinatxtAgregar.setBorder(null);
         EstadoMaquinatxtAgregar.setBounds(427, 92, 150, 30);
         DatosMaquinaria.add(EstadoMaquinatxtAgregar);
 
-     
-        ///////Botones
+        ///////Botones de la interfaz Agregar, Elimnar, Editar, Autorizar Maquinaria
         JButton AgregarMaquina = new JButton("Agregar maquinaría");
         AgregarMaquina.setBackground(Color.decode("#049cff"));
         AgregarMaquina.setBounds(350, 400, 210, 50);
@@ -169,51 +165,56 @@ public class AgregarMaquinaria extends JFrame {
         AgregarMaquina.setForeground(Color.black);
         DatosMaquinaria.add(AgregarMaquina);
         AgregarMaquina.addActionListener(new ActionListener() {
-
+            //Evento del boton agregar Maquinaria
             @Override
             public void actionPerformed(ActionEvent ae) {
+                //Obtiene los datos de los componentes creados para insertarlos a la base de datos
 
-                String nombre = NombreMaquinatxt.getText();
-                int modelo = Integer.parseInt(Modelotxt.getText());
-                String tipo = (String) TipoCombo.getSelectedItem();
-                double costo = Integer.parseInt(CostoTxt.getText());
-                String matricula = MatriculaTxt.getText();
-                //String marca = .getText();
-                String estado = EstadoMaquinatxtAgregar.getSelectedItem().toString();
-                double precio_renta = Double.parseDouble(precio_rentaTxt.getText());
-               
-                try {
-                    Connection cn;
-                    cn = getConexion();
-                    psd = cn.prepareStatement("INSERT INTO MAQUINARIA (NOMBRE_MAQ,TIPO_MAQ,MODELO_MAQ,COSTO_MAQ,ESTADO_MAQ,PRECIORENTA_MAQ,MATRICULA_MAQ,IMAGEN_MAQ) VALUES(?,?,?,?,?,?,?,?)");
-                    psd.setString(1, nombre);
-                    psd.setString(2, tipo);
-                    psd.setInt(3, modelo);
-                    psd.setDouble(4, costo);
-                    psd.setString(5, estado);
-                    psd.setDouble(6, precio_renta);
-                    psd.setString(7, matricula);
-                    psd.setBlob(8, fis, getLongitud());
-                    int res = psd.executeUpdate();
-                    
-                   if (res < 0) {
-                        JOptionPane.showMessageDialog(null, "No se pudo añadir el registro");
+                if (!(NombreMaquinatxt.getText().isEmpty() || TipoCombo.getSelectedItem().toString().isEmpty() || CostoTxt.getText().isEmpty() || MatriculaTxt.getText().isEmpty()
+                        || EstadoMaquinatxtAgregar.getSelectedItem().toString().isEmpty() || precio_rentaTxt.getText().isEmpty() || Modelo.getText().isEmpty()) || longitud_bytes==0) {
+                    String nombre = NombreMaquinatxt.getText();
+                    int modelo = Integer.parseInt(Modelotxt.getText());
+                    String tipo = (String) TipoCombo.getSelectedItem();
+                    double costo = Double.parseDouble(CostoTxt.getText());
+                    String matricula = MatriculaTxt.getText();
+                    String estado = EstadoMaquinatxtAgregar.getSelectedItem().toString();
+                    double precio_renta = Double.parseDouble(precio_rentaTxt.getText());
+                    try {
+                        //Hace la conexion e inserta los elementos a cada columna de la base de datos
+                        Connection cn;
+                        cn = Clase_Conexion.getConexion();
+                        psd = cn.prepareStatement("INSERT INTO Maquinaria (NOMBRE_MAQ,TIPO_MAQ,MODELO_MAQ,COSTO_MAQ,ESTADO_MAQ,PRECIO_RENTA,MATRICULA_MAQ,IMAGEN_MAQ) VALUES(?,?,?,?,?,?,?,?)");
+                        psd.setString(1, nombre);
+                        psd.setString(2, tipo);
+                        psd.setInt(3, modelo);
+                        psd.setDouble(4, costo);
+                        psd.setString(5, estado);
+                        psd.setDouble(6, precio_renta);
+                        psd.setString(7, matricula);
+                        psd.setBlob(8, fis, getLongitud());
+                        int res = psd.executeUpdate();
+                        if (res < 0) {
+                            JOptionPane.showMessageDialog(null, "No se pudo añadir el registro");
+                        }
+                        JOptionPane.showMessageDialog(null, "Registro Exitoso");
+                        cn.close();
+                        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        mt.actualizaEstatus();
+                    } catch (SQLException e) {
+                        JOptionPane.showMessageDialog(null,"Error en: " + e);
                     }
-                    JOptionPane.showMessageDialog(null, "Registro Exitoso");
-                    cn.close();
-                    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    mt.actualizaEstatus();
-                } catch (SQLException e) {
-                    System.err.println("Error en: " + e);
+                    setDefaultCloseOperation(EXIT_ON_CLOSE);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Algun dato esta vacio");
                 }
-
-                mt.actualizaEstatus();
-                dispose();
             }
-            
-
         });
-
+        /**
+         * Creacion de Boton agregar foto, este boton tiene un evento con lo que
+         * conexiona con El Componente JFileChooser que es un buscador de
+         * imagenes en el Sistema Operativo
+         */
         JButton AgregarFoto = new JButton("Agregar foto");
         AgregarFoto.setBackground(Color.decode("#049cff"));
         AgregarFoto.setBounds(610, 330, 210, 50);
@@ -231,16 +232,13 @@ public class AgregarMaquinaria extends JFrame {
                     try {
                         fis = new FileInputStream(jfc.getSelectedFile());
                         longitud_bytes = (int) jfc.getSelectedFile().length();
-
                         Image icono = ImageIO.read(jfc.getSelectedFile()).getScaledInstance(Imagen.getWidth(), Imagen.getHeight(), Image.SCALE_DEFAULT);
                         Imagen.setIcon(new ImageIcon(icono));
                         Imagen.updateUI();
-
                         setLongitud(longitud_bytes);
                     } catch (Exception ee) {
                     }
                 }
-
             }
         });
 
@@ -251,28 +249,12 @@ public class AgregarMaquinaria extends JFrame {
 
     }
 
-    public static void main(String[] args) {
-        new AgregarMaquinaria();
+    //Estos Metodos set y get se ocupan para establecer los datos que requieren los datos de tipo BLOB 
+    public void setLongitud(int longi) {
+        longitud_bytes = longi;
     }
 
-    public Connection getConexion() {
-        Connection conexion = null;
-        try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-            conexion = (Connection) DriverManager.getConnection("jdbc:derby://localhost:1527/Constructora", "Adminn", "admin");
-            System.out.println("Se concecto Correctamente ");
-
-        } catch (Exception e) {
-            System.err.println("Hubo un error en la instalacion " + e);
-        }
-        return conexion;
-
-    }
-    
-    public void setLongitud(int longi){
-        longitud_bytes=longi;
-    }
-    public int getLongitud(){
+    public int getLongitud() {
         return longitud_bytes;
     }
 }
